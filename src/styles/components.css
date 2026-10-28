@@ -1,0 +1,157 @@
+/* Shared components — see design/design-system.md « Composants ». */
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 40px;
+  padding-bottom: 64px;
+}
+
+.screen-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.eyebrow--section {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Press feedback */
+.push {
+  transition: transform 80ms ease;
+}
+
+.push:active:not(:disabled) {
+  transform: translateY(3px);
+}
+
+/* Buttons */
+.btn {
+  min-height: 52px;
+  padding: 0 24px;
+  border: var(--border);
+  border-radius: var(--radius-button);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.btn--primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn--secondary {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 18px;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xs);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--border);
+  border-radius: var(--radius-button);
+  box-shadow: var(--shadow-sm);
+}
+
+.button-row,
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.button-row {
+  gap: 12px;
+}
+
+/* Stat pill */
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  border: var(--border);
+  border-radius: var(--radius-button);
+}
+
+.stat-pill__value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-pill--game {
+  align-items: center;
+  min-width: 88px;
+  padding: 6px 14px;
+  background: var(--surface);
+}
+
+.stat-pill--game .stat-pill__value {
+  font-size: 24px;
+}
+
+.stat-pill--end {
+  padding: 8px 18px;
+  background: var(--paper);
+}
+
+.stat-pill--end .stat-pill__value {
+  font-size: 30px;
+}
+
+/* Square image thumbnail */
+.thumb {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1.5px solid var(--thumb-border);
+  border-radius: var(--radius-thumb);
+}

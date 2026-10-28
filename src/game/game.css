@@ -1,0 +1,297 @@
+/* Game and end screens — spec §2.3–2.4, design-system « Carte de jeu » and « Animations ». */
+
+.game-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.game-header__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.game-header__title .eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+/* Board */
+.board-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.game-instructions {
+  margin: 0;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 560px) {
+  .board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .screen-title {
+    font-size: 32px;
+  }
+
+  /* Keep the three pills and the restart button on one line on phones */
+  .game-header .stat-row {
+    gap: 8px;
+  }
+
+  .game-header .stat-pill--game {
+    min-width: 72px;
+    padding: 6px 8px;
+  }
+}
+
+/* Card: a button holding two stacked faces that rotate together */
+.memory-card {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: transparent;
+  perspective: 900px;
+}
+
+.memory-card.is-up {
+  cursor: default;
+}
+
+.memory-card__inner {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform var(--flip-duration) var(--flip-ease);
+}
+
+.memory-card:not(.is-up):hover .memory-card__inner {
+  transform: translateY(-4px);
+}
+
+.memory-card.is-up .memory-card__inner {
+  transform: rotateY(180deg);
+}
+
+.memory-card__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  container-type: size;
+}
+
+.memory-card__back {
+  background: var(--card-back);
+  box-shadow: inset 0 0 0 7px rgba(255, 255, 255, 0.14);
+}
+
+.memory-card__back img {
+  width: 56%;
+  height: 70%;
+}
+
+.memory-card__front {
+  transform: rotateY(180deg);
+}
+
+.memory-card__front--image {
+  background: var(--surface);
+}
+
+.memory-card__front--word {
+  background: var(--word-card);
+}
+
+.memory-card.is-matched .memory-card__front {
+  outline: 4px solid var(--success);
+  outline-offset: -3px;
+}
+
+.memory-card.is-wrong .memory-card__front {
+  outline: 4px solid var(--accent-red);
+  outline-offset: -3px;
+}
+
+/* Shake the button, not the face, so the rotation is not broken */
+.memory-card.is-wrong {
+  animation: card-shake 0.45s ease;
+}
+
+@keyframes card-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.memory-card__check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--success);
+  color: #fff;
+}
+
+.word-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px;
+  text-align: center;
+}
+
+.word-face__article {
+  font-size: max(12px, 8cqi);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.word-face__noun {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-card__inner {
+    transition: none;
+  }
+
+  .memory-card.is-wrong {
+    animation: none;
+  }
+}
+
+/* End screen */
+.end-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 32px;
+  background: var(--surface);
+  border: var(--border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-lg);
+}
+
+.end-panel__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.end-panel h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.end-panel h2:focus {
+  outline: none;
+}
+
+.end-panel__heading p {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.end-panel__recap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.end-panel__recap ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.end-panel__recap li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 14px 8px 8px;
+  background: var(--paper);
+  border: 2px solid var(--paper-dot);
+  border-radius: var(--radius-button);
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.end-panel__recap .thumb {
+  width: 48px;
+  height: 48px;
+}
+
+@media (max-width: 560px) {
+  .end-panel {
+    padding: 22px;
+  }
+
+  .end-panel h2 {
+    font-size: 40px;
+  }
+}
