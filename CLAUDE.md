@@ -55,6 +55,8 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 
 CI GitHub Actions (`.github/workflows/ci.yml`) : sur chaque pull request et chaque push sur `main`, `npm ci` puis lint, tests et build (Node 24). Pas de déploiement pour l'instant.
 
+`main` est protégée par la règle GitHub « Protect main » (Settings → Rules) : **aucun push direct, même pour l'admin**. Tout changement passe par une branche + une pull request, mergeable seulement quand le check « Lint, test, build » est vert. Suppression et force-push de `main` interdits. Si le nom du job CI change, mettre à jour le check requis dans la règle.
+
 ## Organisation du code
 
 - `src/types.ts` — modèle de données (spec §4).
