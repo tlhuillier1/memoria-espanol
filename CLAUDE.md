@@ -59,7 +59,13 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 - `src/store/` — interface `ThemeStore` + thèmes intégrés ; implémentation IndexedDB (`idbThemeStore.ts`, toutes les fiches sous une clé, écrites avec `update`) ; instance unique dans `index.ts` ; `useCustomThemes` (état React d'abord, puis écriture) ; classe mémorisée en localStorage (`gradePreference.ts`).
 - `src/game/` — moteur pur (`engine.ts`), hook des minuteries (`useMemoryGame.ts`), écrans de partie et de fin.
 - `src/home/` — accueil, cartes de thème (suppression confirmée en ligne), pop-up du nombre de mots (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur).
-- `src/editor/` — formulaire de création / modification (encore un écran provisoire).
+- `src/editor/` — formulaire de création / modification : brouillon et validation purs (`draft.ts`), import des photos (`readImage.ts`, 360 px max, JPEG 0,82 sur fond blanc), écran `EditorScreen.tsx`.
+
+## Pièges rencontrés
+
+- **`img.decode()`** peut rester en attente quand la page ne s'affiche pas (onglet en arrière-plan, panneau masqué) : utiliser `onload` / `onerror`.
+- **`window.scrollTo()`** renvoie une promesse dans les Chrome récents : ne jamais l'écrire en corps d'expression d'un effet (`useEffect(() => window.scrollTo(…))`), React la prend pour une fonction de nettoyage.
+- **Le watcher de Vite sous Windows** rate parfois une écriture de fichier : si le navigateur affiche un comportement ancien, vérifier ce que sert `/src/...` et faire `touch` sur le fichier.
 - `src/lib/` — logique pure testable (ex. `splitArticle`), `imageUrl()` pour résoudre les chemins d'images avec la base du site.
 - `src/styles/tokens.css` — **copie** de `design/tokens.css` ; `src/data/themes.json` — copie de `design/data/themes.json` ; `public/assets/` — copie de `design/assets/`. Si le design change, recopier ces fichiers.
 - `vite.config.ts` utilise `base: './'` : toujours passer par `imageUrl()` pour les images, jamais de chemin absolu `/assets/…`.

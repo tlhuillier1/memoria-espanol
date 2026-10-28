@@ -1,0 +1,255 @@
+/* Theme form — spec §2.5, design-system « Champ texte », « Emplacement photo », « Bandeaux ». */
+
+.editor {
+  max-width: 820px;
+}
+
+.editor__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.editor__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 28px;
+  background: var(--surface);
+  border: var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-md);
+}
+
+.editor__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.editor__name {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field__label {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.field__label--small {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.text-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--border);
+  border-radius: var(--radius-field);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.text-input--large {
+  min-height: 52px;
+  padding: 10px 16px;
+  font-size: 20px;
+}
+
+.text-input::placeholder {
+  color: var(--slot-border);
+  font-weight: 600;
+}
+
+/* Compact grade picker of the form */
+.grade-picker--small {
+  gap: 8px;
+}
+
+.grade-picker--small .grade-picker__button {
+  min-width: 64px;
+  min-height: 52px;
+  padding: 0 14px;
+  border-radius: var(--radius-field);
+  box-shadow: none;
+}
+
+.grade-picker--small .grade-picker__label {
+  font-size: 22px;
+}
+
+.editor__words-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editor__words-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.editor__ready {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.editor__ready.is-valid {
+  color: var(--success);
+}
+
+.editor__help {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* Word rows */
+.word-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.word-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: var(--surface-warm);
+  border: 2px solid var(--paper-dot);
+  border-radius: var(--radius-card);
+}
+
+.word-row__field {
+  flex: 1 1 220px;
+  min-width: 0;
+  gap: 6px;
+}
+
+.photo-slot {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 90px;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--primary);
+  border: 2px dashed var(--slot-border);
+  border-radius: var(--radius-field);
+  cursor: pointer;
+}
+
+.photo-slot:focus-within {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.photo-slot__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.word-row__remove {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: var(--surface);
+  color: var(--danger);
+  border: 2px solid var(--paper-dot);
+  border-radius: var(--radius-field);
+}
+
+.add-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  background: var(--surface-warm);
+  color: var(--ink);
+  border: 2px dashed var(--ink);
+  border-radius: var(--radius-button);
+  font-weight: 800;
+  font-size: 17px;
+}
+
+.error-banner {
+  margin: 0;
+  padding: 12px 16px;
+  background: var(--danger-soft);
+  color: var(--danger-text);
+  border-radius: var(--radius-field);
+  font-weight: 800;
+}
+
+.editor__actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 560px) {
+  .editor__panel {
+    padding: 18px;
+  }
+
+  /* Photo and trash on the first line, word field full width below */
+  .word-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    grid-template-areas:
+      'photo remove'
+      'field field';
+    gap: 12px;
+  }
+
+  .photo-slot {
+    grid-area: photo;
+  }
+
+  .word-row__remove {
+    grid-area: remove;
+    justify-self: end;
+    align-self: start;
+  }
+
+  .word-row__field {
+    grid-area: field;
+  }
+
+  .editor__actions .btn {
+    flex: 1 1 auto;
+  }
+}

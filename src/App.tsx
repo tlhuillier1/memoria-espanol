@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
+import { savedNotice } from './editor/draft'
 import { EditorScreen } from './editor/EditorScreen'
 import { GameScreen } from './game/GameScreen'
 import { HomeScreen } from './home/HomeScreen'
@@ -21,16 +22,29 @@ export default function App() {
   const themes = [...builtInThemes, ...customThemes.themes]
   const goHome = () => setScreen({ name: 'home' })
 
+  // Each screen starts at the top (the home page may have been scrolled down to « Crear un tema »).
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [screen])
+
   const changeGrade = (next: Grade) => {
     setGrade(next)
     saveGrade(next)
+  }
+
+  /** Back to the home screen on the theme's grade, with the status message (spec §2.5). */
+  const saveTheme = async (theme: Theme) => {
+    changeGrade(theme.grade)
+    goHome()
+    const persisted = await customThemes.save(theme)
+    setNotice(savedNotice(theme, persisted))
   }
 
   switch (screen.name) {
     case 'game':
       return <GameScreen theme={screen.theme} wordCount={screen.wordCount} onExit={goHome} />
     case 'editor':
-      return <EditorScreen theme={screen.theme} grade={grade} onExit={goHome} />
+      return <EditorScreen theme={screen.theme} grade={grade} onCancel={goHome} onSave={saveTheme} />
     case 'home':
       return (
         <HomeScreen
