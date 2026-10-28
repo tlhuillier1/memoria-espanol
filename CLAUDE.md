@@ -53,6 +53,8 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 | `npm test` / `npm run test:watch` | Tests Vitest (`src/**/*.test.ts`) |
 | `npm run lint` | oxlint |
 
+CI GitHub Actions (`.github/workflows/ci.yml`) : sur chaque pull request et chaque push sur `main`, `npm ci` puis lint, tests et build (Node 24). Pas de déploiement pour l'instant.
+
 ## Organisation du code
 
 - `src/types.ts` — modèle de données (spec §4).
