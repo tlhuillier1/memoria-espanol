@@ -56,7 +56,10 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 ## Organisation du code
 
 - `src/types.ts` — modèle de données (spec §4).
-- `src/store/ThemeStore.ts` — interface `ThemeStore` + thèmes intégrés (implémentation IndexedDB à écrire).
+- `src/store/` — interface `ThemeStore` + thèmes intégrés ; implémentation IndexedDB (`idbThemeStore.ts`, toutes les fiches sous une clé, écrites avec `update`) ; instance unique dans `index.ts` ; `useCustomThemes` (état React d'abord, puis écriture) ; classe mémorisée en localStorage (`gradePreference.ts`).
+- `src/game/` — moteur pur (`engine.ts`), hook des minuteries (`useMemoryGame.ts`), écrans de partie et de fin.
+- `src/home/` — accueil, cartes de thème (suppression confirmée en ligne), pop-up du nombre de mots (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur).
+- `src/editor/` — formulaire de création / modification (encore un écran provisoire).
 - `src/lib/` — logique pure testable (ex. `splitArticle`), `imageUrl()` pour résoudre les chemins d'images avec la base du site.
 - `src/styles/tokens.css` — **copie** de `design/tokens.css` ; `src/data/themes.json` — copie de `design/data/themes.json` ; `public/assets/` — copie de `design/assets/`. Si le design change, recopier ces fichiers.
 - `vite.config.ts` utilise `base: './'` : toujours passer par `imageUrl()` pour les images, jamais de chemin absolu `/assets/…`.

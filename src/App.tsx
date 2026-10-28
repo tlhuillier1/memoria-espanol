@@ -1,52 +1,49 @@
 import { useState } from 'react'
-import { ThemeImage } from './components/ThemeImage'
-import { defaultWordCount } from './game/engine'
+import { EditorScreen } from './editor/EditorScreen'
 import { GameScreen } from './game/GameScreen'
+import { HomeScreen } from './home/HomeScreen'
+import { themeStore } from './store'
+import { loadGrade, saveGrade } from './store/gradePreference'
 import { builtInThemes } from './store/ThemeStore'
-import type { Theme } from './types'
+import { useCustomThemes } from './store/useCustomThemes'
+import type { Grade, Theme } from './types'
 
-type Screen = { name: 'home' } | { name: 'game'; theme: Theme; wordCount: number }
+type Screen =
+  | { name: 'home' }
+  | { name: 'game'; theme: Theme; wordCount: number }
+  | { name: 'editor'; theme?: Theme }
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
+  const [grade, setGrade] = useState<Grade>(loadGrade)
+  const [notice, setNotice] = useState('')
+  const customThemes = useCustomThemes(themeStore)
+  const themes = [...builtInThemes, ...customThemes.themes]
+  const goHome = () => setScreen({ name: 'home' })
 
-  if (screen.name === 'game') {
-    return <GameScreen theme={screen.theme} wordCount={screen.wordCount} onExit={() => setScreen({ name: 'home' })} />
+  const changeGrade = (next: Grade) => {
+    setGrade(next)
+    saveGrade(next)
   }
 
-  // Temporary home: the real one (grade picker, theme cards, word-count dialog) comes next.
-  return (
-    <main className="container screen">
-      <h1
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontWeight: 800,
-          fontSize: 'clamp(52px, 10vw, 76px)',
-          lineHeight: 0.95,
-          letterSpacing: '-0.01em',
-          margin: 0,
-        }}
-      >
-        <span style={{ color: 'var(--accent-red)' }}>¡</span>Memoria
-        <span style={{ color: 'var(--accent-red)' }}>!</span>
-      </h1>
-      <ul style={{ display: 'flex', flexWrap: 'wrap', gap: 16, listStyle: 'none', padding: 0, margin: 0 }}>
-        {builtInThemes.map((theme) => (
-          <li key={theme.id}>
-            <button
-              type="button"
-              className="btn btn--secondary push"
-              style={{ display: 'flex', alignItems: 'center', gap: 10, background: theme.tint }}
-              onClick={() => setScreen({ name: 'game', theme, wordCount: defaultWordCount(theme.words.length) })}
-            >
-              <span className="thumb" style={{ width: 40, height: 40 }}>
-                <ThemeImage src={theme.words[0].image} pictoSize="90%" />
-              </span>
-              Jugar: {theme.name}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </main>
-  )
+  switch (screen.name) {
+    case 'game':
+      return <GameScreen theme={screen.theme} wordCount={screen.wordCount} onExit={goHome} />
+    case 'editor':
+      return <EditorScreen theme={screen.theme} grade={grade} onExit={goHome} />
+    case 'home':
+      return (
+        <HomeScreen
+          grade={grade}
+          themes={themes}
+          notice={notice}
+          onGradeChange={changeGrade}
+          onPlay={(theme, wordCount) => setScreen({ name: 'game', theme, wordCount })}
+          onCreate={() => setScreen({ name: 'editor' })}
+          onEdit={(theme) => setScreen({ name: 'editor', theme })}
+          onDelete={(theme) => customThemes.remove(theme.id)}
+          onDismissNotice={() => setNotice('')}
+        />
+      )
+  }
 }

@@ -36,8 +36,8 @@ export function EndPanel({ picked, attempts, seconds, onReplay, onExit }: EndPan
       <div className="end-panel__recap">
         <h3 className="eyebrow eyebrow--section">Repasa las palabras</h3>
         <ul>
-          {picked.map((word) => (
-            <li key={word.word}>
+          {picked.map((word, index) => (
+            <li key={index}>
               <span className="thumb">
                 <ThemeImage src={word.image} />
               </span>
