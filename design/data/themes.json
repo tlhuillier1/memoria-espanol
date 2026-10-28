@@ -1,0 +1,145 @@
+{
+  "grades": [
+    "5e",
+    "4e",
+    "3e"
+  ],
+  "themes": [
+    {
+      "id": "frutas",
+      "grade": "5e",
+      "name": "Las frutas",
+      "nameFr": "Les fruits",
+      "tint": "#FDE4DF",
+      "builtIn": true,
+      "words": [
+        {
+          "word": "la manzana",
+          "image": "assets/pictos/frutas/manzana.svg"
+        },
+        {
+          "word": "el plátano",
+          "image": "assets/pictos/frutas/platano.svg"
+        },
+        {
+          "word": "la naranja",
+          "image": "assets/pictos/frutas/naranja.svg"
+        },
+        {
+          "word": "la fresa",
+          "image": "assets/pictos/frutas/fresa.svg"
+        },
+        {
+          "word": "las uvas",
+          "image": "assets/pictos/frutas/uvas.svg"
+        },
+        {
+          "word": "la sandía",
+          "image": "assets/pictos/frutas/sandia.svg"
+        }
+      ]
+    },
+    {
+      "id": "animales",
+      "grade": "5e",
+      "name": "Los animales",
+      "nameFr": "Les animaux",
+      "tint": "#FFEFCF",
+      "builtIn": true,
+      "words": [
+        {
+          "word": "el gato",
+          "image": "assets/pictos/animales/gato.svg"
+        },
+        {
+          "word": "el perro",
+          "image": "assets/pictos/animales/perro.svg"
+        },
+        {
+          "word": "el pez",
+          "image": "assets/pictos/animales/pez.svg"
+        },
+        {
+          "word": "el pájaro",
+          "image": "assets/pictos/animales/pajaro.svg"
+        },
+        {
+          "word": "la tortuga",
+          "image": "assets/pictos/animales/tortuga.svg"
+        },
+        {
+          "word": "el ratón",
+          "image": "assets/pictos/animales/raton.svg"
+        }
+      ]
+    },
+    {
+      "id": "colegio",
+      "grade": "5e",
+      "name": "El material escolar",
+      "nameFr": "Le matériel scolaire",
+      "tint": "#DDE7FA",
+      "builtIn": true,
+      "words": [
+        {
+          "word": "el lápiz",
+          "image": "assets/pictos/colegio/lapiz.svg"
+        },
+        {
+          "word": "la regla",
+          "image": "assets/pictos/colegio/regla.svg"
+        },
+        {
+          "word": "el libro",
+          "image": "assets/pictos/colegio/libro.svg"
+        },
+        {
+          "word": "las tijeras",
+          "image": "assets/pictos/colegio/tijeras.svg"
+        },
+        {
+          "word": "la mochila",
+          "image": "assets/pictos/colegio/mochila.svg"
+        },
+        {
+          "word": "la goma",
+          "image": "assets/pictos/colegio/goma.svg"
+        }
+      ]
+    },
+    {
+      "id": "tiempo",
+      "grade": "5e",
+      "name": "El tiempo",
+      "nameFr": "La météo",
+      "tint": "#DDF0E3",
+      "builtIn": true,
+      "words": [
+        {
+          "word": "el sol",
+          "image": "assets/pictos/tiempo/sol.svg"
+        },
+        {
+          "word": "la nube",
+          "image": "assets/pictos/tiempo/nube.svg"
+        },
+        {
+          "word": "la lluvia",
+          "image": "assets/pictos/tiempo/lluvia.svg"
+        },
+        {
+          "word": "la nieve",
+          "image": "assets/pictos/tiempo/nieve.svg"
+        },
+        {
+          "word": "la tormenta",
+          "image": "assets/pictos/tiempo/tormenta.svg"
+        },
+        {
+          "word": "el arcoíris",
+          "image": "assets/pictos/tiempo/arcoiris.svg"
+        }
+      ]
+    }
+  ]
+}

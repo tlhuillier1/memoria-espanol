@@ -1,0 +1,71 @@
+/* ¡Memoria! — design tokens (voir design-system.md) */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  /* Couleurs */
+  --ink: #1F2A44;
+  --ink-soft: #3A4560;
+  --muted: #4A5470;
+  --paper: #FBF6EC;
+  --paper-dot: #E3D8C2;
+  --surface: #FFFFFF;
+  --surface-warm: #FFFDF8;
+  --primary: #2346A8;
+  --accent: #F2B632;
+  --accent-red: #D9472F;
+  --success: #2E7D4F;
+  --danger: #B3321F;
+  --danger-text: #9E2B17;
+  --danger-soft: #FDE4DF;
+  --word-card: #FFF4D6;
+  --custom-soft: #ECE6F7;
+  --custom-ink: #3E2A78;
+  --slot-border: #6B7488;
+  --thumb-border: #D9D2C3;
+  --overlay: rgba(31, 42, 68, 0.6);
+  --card-back: #2346A8; /* personnalisable : #2346A8 | #D9472F | #2E7D4F | #1F2A44 */
+
+  /* Typographie */
+  --font-display: 'Baloo 2', 'Trebuchet MS', sans-serif;
+  --font-body: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+
+  /* Formes */
+  --border: 2px solid var(--ink);
+  --radius-thumb: 10px;
+  --radius-field: 12px;
+  --radius-button: 14px;
+  --radius-card: 16px;
+  --radius-theme: 20px;
+  --radius-panel: 24px;
+  --radius-pill: 999px;
+
+  /* Ombres « jouet » */
+  --shadow-xs: 0 3px 0 var(--ink);
+  --shadow-sm: 0 4px 0 var(--ink);
+  --shadow-md: 0 6px 0 var(--ink);
+  --shadow-lg: 0 8px 0 var(--ink);
+
+  /* Mouvement */
+  --flip-duration: 0.45s;
+  --flip-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --mismatch-delay: 1100ms;
+  --win-delay: 900ms;
+
+  /* Mise en page */
+  --container: 1080px;
+  --gutter: 20px;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--paper-dot) 1.3px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
