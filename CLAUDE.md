@@ -41,7 +41,7 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 1. **Partage des thèmes créés** : en v1 ils restent sur l'appareil où ils ont été créés. Faut-il que les élèves voient sur leur tablette les thèmes créés par la professeure (⇒ stockage en ligne, ex. Supabase) ?
 2. **Qui peut créer/modifier/supprimer un thème** : tout le monde (comme le prototype) ou seulement la professeure (mode enseignant protégé) ?
 3. **Thèmes intégrés de 4e et 3e** : aucun pour l'instant ; attendre la liste des thématiques de l'utilisateur.
-4. **Hébergement / nom de domaine**.
+4. **Nom de domaine** : le site est sur `memoria-espanol.vercel.app` ; pas de domaine personnalisé pour l'instant.
 
 ## Commandes
 
@@ -53,7 +53,9 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 | `npm test` / `npm run test:watch` | Tests Vitest (`src/**/*.test.ts`) |
 | `npm run lint` | oxlint |
 
-CI GitHub Actions (`.github/workflows/ci.yml`) : sur chaque pull request et chaque push sur `main`, `npm ci` puis lint, tests et build (Node 24). Pas de déploiement pour l'instant.
+CI GitHub Actions (`.github/workflows/ci.yml`) : sur chaque pull request et chaque push sur `main`, `npm ci` puis lint, tests et build (Node 24).
+
+Déploiement : projet Vercel `memoria-espanol` (compte `tlhuillier1`), relié au dépôt GitHub. Chaque push sur `main` (donc chaque merge de PR) met en ligne https://memoria-espanol.vercel.app ; chaque PR reçoit une URL d'aperçu, accessible seulement connecté à Vercel. Réglages du projet : framework Vite, `npm ci`, `npm run build`, sortie `dist`, Node 24. Pas de `vercel.json` (inutile pour un site statique sans routes).
 
 `main` est protégée par la règle GitHub « Protect main » (Settings → Rules) : **aucun push direct, même pour l'admin**. Tout changement passe par une branche + une pull request, mergeable seulement quand le check « Lint, test, build » est vert. Suppression et force-push de `main` interdits. Si le nom du job CI change, mettre à jour le check requis dans la règle.
 

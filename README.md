@@ -84,7 +84,7 @@ Il affiche « ¡Enhorabuena! », le nombre d'essais et le temps, puis la liste *
 | Stockage des thèmes créés | IndexedDB du navigateur via [idb-keyval](https://github.com/jakearchibald/idb-keyval) |
 | Tests | [Vitest](https://vitest.dev) |
 | Lint | [oxlint](https://oxc.rs) |
-| Hébergement | Tout hébergeur de fichiers statiques (Vercel, Netlify, GitHub Pages…) |
+| Hébergement | [Vercel](https://vercel.com) (tout hébergeur de fichiers statiques convient) |
 
 Il n'y a ni routeur, ni gestionnaire d'état, ni bibliothèque de composants. L'application reste petite et ses dépendances sont réduites au minimum.
 
@@ -196,6 +196,17 @@ Les thèmes intégrés sont livrés avec le site et visibles sur tous les appare
 
 ## Déploiement
 
+Le site est en ligne sur **https://memoria-espanol.vercel.app**.
+
+Le projet Vercel `memoria-espanol` est relié à ce dépôt GitHub :
+
+- **chaque merge sur `main`** met automatiquement le site en ligne à jour (en moins d'une minute) ;
+- **chaque pull request** reçoit une URL d'aperçu pour tester avant le merge. Ces aperçus ne sont visibles qu'en étant connecté au compte Vercel ; le site principal, lui, est public.
+
+Rien à installer ni à lancer à la main. Le suivi des déploiements se fait sur le tableau de bord Vercel du projet.
+
+### Autre hébergeur
+
 `npm run build` produit un dossier `dist/` entièrement statique. Il n'y a ni routes ni serveur : il suffit de publier ce dossier.
 
 | Hébergeur | Réglages |
@@ -232,7 +243,7 @@ Pas encore tranché :
 - **Partage des thèmes créés** : faut-il que les élèves retrouvent sur leur tablette les thèmes créés par la professeure ? Cela demanderait un stockage en ligne (par exemple Supabase), branché derrière `ThemeStore`.
 - **Droits** : aujourd'hui, toute personne qui utilise le site peut créer, modifier ou supprimer un thème (sur son appareil). Un « mode enseignant » protégé est envisageable.
 - **Thèmes intégrés de 4e et 3e** : aucun pour l'instant, en attente de la liste des thématiques.
-- **Hébergement et nom de domaine** : à définir.
+- **Nom de domaine** : le site utilise l'adresse gratuite `memoria-espanol.vercel.app`. Un domaine personnalisé pourra être ajouté dans Vercel.
 
 Hors périmètre de la v1 : synthèse vocale ou prononciation, niveaux de difficulté, mode à plusieurs joueurs, comptes élèves, scores enregistrés.
 
