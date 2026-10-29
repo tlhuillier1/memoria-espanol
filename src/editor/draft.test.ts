@@ -80,6 +80,45 @@ describe('validateDraft', () => {
     expect(result.ok && result.theme.id).toBe('existing')
   })
 
+  it('keeps a modified built-in theme built-in, with its tint and French name', () => {
+    const builtIn: Theme = {
+      id: 'frutas',
+      grade: '5e',
+      name: 'Las frutas',
+      nameFr: 'Les fruits',
+      tint: '#FDE4DF',
+      builtIn: true,
+      words: [
+        { word: 'la manzana', image: 'assets/pictos/frutas/manzana.svg' },
+        { word: 'la fresa', image: 'assets/pictos/frutas/fresa.svg' },
+      ],
+    }
+    const d = draftFromTheme(builtIn)
+    const kiwi = row('el kiwi', photo)
+    const result = validateDraft({ ...d, rows: [...d.rows.slice(1), kiwi] })
+    expect(result).toEqual({
+      ok: true,
+      theme: {
+        ...builtIn,
+        words: [
+          { word: 'la fresa', image: 'assets/pictos/frutas/fresa.svg' },
+          { word: 'el kiwi', image: photo },
+        ],
+      },
+    })
+  })
+
+  it('drops the French name of a renamed built-in theme', () => {
+    const d: Draft = {
+      ...draft([row('a', photo), row('b', photo)], 'Mis frutas'),
+      id: 'frutas',
+      builtIn: { name: 'Las frutas', nameFr: 'Les fruits', tint: '#FDE4DF' },
+    }
+    const result = validateDraft(d)
+    expect(result.ok && result.theme).toMatchObject({ id: 'frutas', builtIn: true, tint: '#FDE4DF', name: 'Mis frutas' })
+    expect(result.ok && result.theme.nameFr).toBeUndefined()
+  })
+
   it('generates a unique id by default', () => {
     const d = draft([row('a', photo), row('b', photo)])
     const a = validateDraft(d)

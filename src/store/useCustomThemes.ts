@@ -3,7 +3,7 @@ import type { Theme } from '../types'
 import type { ThemeStore } from './ThemeStore'
 
 /**
- * Custom themes held in React state and mirrored to the store.
+ * Stored themes (custom themes and modified built-in ones) held in React state and mirrored to the store.
  * The UI updates first, so a theme stays usable for the session even if the store write fails (spec §5).
  */
 export function useCustomThemes(store: ThemeStore) {

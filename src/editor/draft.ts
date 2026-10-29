@@ -23,6 +23,8 @@ export interface DraftRow {
 export interface Draft {
   /** Set when modifying an existing theme. */
   id?: string
+  /** Set when modifying a built-in theme: it keeps its tint, and its French name while its name is unchanged. */
+  builtIn?: Pick<Theme, 'name' | 'nameFr' | 'tint'>
   name: string
   grade: Grade
   rows: DraftRow[]
@@ -41,6 +43,7 @@ export function emptyDraft(grade: Grade): Draft {
 export function draftFromTheme(theme: Theme): Draft {
   return {
     id: theme.id,
+    builtIn: theme.builtIn ? { name: theme.name, nameFr: theme.nameFr, tint: theme.tint } : undefined,
     name: theme.name,
     grade: theme.grade,
     rows: theme.words.map((w) => ({ key: crypto.randomUUID(), word: w.word, image: w.image })),
@@ -64,14 +67,16 @@ export function validateDraft(draft: Draft, newId: () => string = () => crypto.r
   if (!rows.every(isComplete)) return { ok: false, error: FORM_ERRORS.incompleteRow }
   if (rows.length < MIN_ROWS) return { ok: false, error: FORM_ERRORS.tooFewRows }
 
+  const base = draft.builtIn
   return {
     ok: true,
     theme: {
       id: draft.id ?? newId(),
       grade: draft.grade,
       name,
-      tint: CUSTOM_TINT,
-      builtIn: false,
+      ...(base?.nameFr && base.name === name ? { nameFr: base.nameFr } : {}),
+      tint: base?.tint ?? CUSTOM_TINT,
+      builtIn: !!base,
       words: rows.map((row) => ({ word: row.word.trim(), image: row.image })),
     },
   }

@@ -10,13 +10,16 @@ import './home.css'
 interface HomeScreenProps {
   grade: Grade
   themes: Theme[]
+  /** Built-in themes that have a modified copy (they can be restored). */
+  modifiedIds: ReadonlySet<string>
   /** Status after saving a theme; cleared by the next action. */
   notice: string
   onGradeChange: (grade: Grade) => void
   onPlay: (theme: Theme, wordCount: number) => void
   onCreate: () => void
   onEdit: (theme: Theme) => void
-  onDelete: (theme: Theme) => void
+  /** Deletes a custom theme, or restores the original of a modified built-in one. */
+  onRemove: (theme: Theme) => void
   onDismissNotice: () => void
 }
 
@@ -26,10 +29,11 @@ export function HomeScreen(props: HomeScreenProps) {
   const sectionTitleRef = useRef<HTMLHeadingElement>(null)
   const gradeThemes = themes.filter((t) => t.grade === grade)
 
-  const handleDelete = (theme: Theme) => {
-    props.onDelete(theme)
-    // The card (and the focused « Sí » button) disappears: keep focus in the list.
-    sectionTitleRef.current?.focus()
+  const handleRemove = (theme: Theme) => {
+    props.onRemove(theme)
+    // A deleted card (and its focused « Sí » button) disappears: keep focus in the list.
+    // A restored built-in theme keeps its card, which moves focus itself.
+    if (!theme.builtIn) sectionTitleRef.current?.focus()
   }
 
   return (
@@ -68,9 +72,10 @@ export function HomeScreen(props: HomeScreenProps) {
             <ThemeCard
               key={theme.id}
               theme={theme}
+              modified={props.modifiedIds.has(theme.id)}
               onPlay={() => setPicking(theme)}
               onEdit={() => props.onEdit(theme)}
-              onDelete={() => handleDelete(theme)}
+              onRemove={() => handleRemove(theme)}
             />
           ))}
           <button type="button" className="create-card" onClick={props.onCreate}>

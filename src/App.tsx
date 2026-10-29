@@ -5,7 +5,7 @@ import { GameScreen } from './game/GameScreen'
 import { HomeScreen } from './home/HomeScreen'
 import { themeStore } from './store'
 import { loadGrade, saveGrade } from './store/gradePreference'
-import { builtInThemes } from './store/ThemeStore'
+import { builtInThemes, mergeThemes } from './store/ThemeStore'
 import { useCustomThemes } from './store/useCustomThemes'
 import type { Grade, Theme } from './types'
 
@@ -19,7 +19,8 @@ export default function App() {
   const [grade, setGrade] = useState<Grade>(loadGrade)
   const [notice, setNotice] = useState('')
   const customThemes = useCustomThemes(themeStore)
-  const themes = [...builtInThemes, ...customThemes.themes]
+  const themes = mergeThemes(builtInThemes, customThemes.themes)
+  const modifiedIds = new Set(customThemes.themes.filter((t) => t.builtIn).map((t) => t.id))
   const goHome = () => setScreen({ name: 'home' })
 
   // Each screen starts at the top (the home page may have been scrolled down to « Crear un tema »).
@@ -50,12 +51,13 @@ export default function App() {
         <HomeScreen
           grade={grade}
           themes={themes}
+          modifiedIds={modifiedIds}
           notice={notice}
           onGradeChange={changeGrade}
           onPlay={(theme, wordCount) => setScreen({ name: 'game', theme, wordCount })}
           onCreate={() => setScreen({ name: 'editor' })}
           onEdit={(theme) => setScreen({ name: 'editor', theme })}
-          onDelete={(theme) => customThemes.remove(theme.id)}
+          onRemove={(theme) => customThemes.remove(theme.id)}
           onDismissNotice={() => setNotice('')}
         />
       )

@@ -5,26 +5,45 @@ import { themeSubtitle } from './texts'
 
 interface ThemeCardProps {
   theme: Theme
+  /** Built-in theme with a modified copy: it can be restored. */
+  modified: boolean
   onPlay: () => void
   onEdit: () => void
-  onDelete: () => void
+  /** Deletes a custom theme, or restores the original of a modified built-in one. */
+  onRemove: () => void
 }
 
-export function ThemeCard({ theme, onPlay, onEdit, onDelete }: ThemeCardProps) {
+/** Second action next to « Modificar », confirmed inline: delete a custom theme, restore a modified built-in one. */
+function removeAction(theme: Theme, modified: boolean) {
+  if (!theme.builtIn) return { label: 'Eliminar', question: '¿Eliminar este tema?' }
+  if (modified) return { label: 'Restaurar', question: '¿Volver al tema original?' }
+  return null
+}
+
+export function ThemeCard({ theme, modified, onPlay, onEdit, onRemove }: ThemeCardProps) {
   const [confirming, setConfirming] = useState(false)
   const noRef = useRef<HTMLButtonElement>(null)
-  const deleteRef = useRef<HTMLButtonElement>(null)
+  const editRef = useRef<HTMLButtonElement>(null)
+  const removeRef = useRef<HTMLButtonElement>(null)
   const hasOpenedConfirm = useRef(false)
+  const action = removeAction(theme, modified)
 
-  // Keep keyboard focus on the inline confirmation, then back on « Eliminar » after « No ».
+  // Keep keyboard focus on the inline confirmation, then back on its action after « No »
+  // (or on « Modificar » once a restored theme no longer offers « Restaurar »).
   useEffect(() => {
     if (confirming) {
       hasOpenedConfirm.current = true
       noRef.current?.focus()
     } else if (hasOpenedConfirm.current) {
-      deleteRef.current?.focus()
+      const target = removeRef.current ?? editRef.current
+      target?.focus()
     }
   }, [confirming])
+
+  const confirm = () => {
+    setConfirming(false)
+    onRemove()
+  }
 
   return (
     <article className="theme-card">
@@ -42,39 +61,41 @@ export function ThemeCard({ theme, onPlay, onEdit, onDelete }: ThemeCardProps) {
           <p className="theme-card__subtitle">{themeSubtitle(theme)}</p>
         </div>
         {!theme.builtIn && <span className="badge">Mi tema</span>}
+        {theme.builtIn && modified && <span className="badge">Modificado</span>}
       </div>
 
       <button type="button" className="btn btn--primary push" onClick={onPlay} aria-label={`Jugar: ${theme.name}`}>
         Jugar
       </button>
 
-      {!theme.builtIn &&
-        (confirming ? (
-          <div className="theme-card__confirm">
-            <span>¿Eliminar este tema?</span>
-            <button type="button" className="confirm-button confirm-button--yes" onClick={onDelete}>
-              Sí
-            </button>
-            <button type="button" ref={noRef} className="confirm-button confirm-button--no" onClick={() => setConfirming(false)}>
-              No
-            </button>
-          </div>
-        ) : (
-          <div className="theme-card__actions">
-            <button type="button" className="text-action" onClick={onEdit} aria-label={`Modificar: ${theme.name}`}>
-              Modificar
-            </button>
+      {action && confirming ? (
+        <div className="theme-card__confirm">
+          <span>{action.question}</span>
+          <button type="button" className="confirm-button confirm-button--yes" onClick={confirm}>
+            Sí
+          </button>
+          <button type="button" ref={noRef} className="confirm-button confirm-button--no" onClick={() => setConfirming(false)}>
+            No
+          </button>
+        </div>
+      ) : (
+        <div className="theme-card__actions">
+          <button type="button" ref={editRef} className="text-action" onClick={onEdit} aria-label={`Modificar: ${theme.name}`}>
+            Modificar
+          </button>
+          {action && (
             <button
               type="button"
-              ref={deleteRef}
+              ref={removeRef}
               className="text-action text-action--danger"
               onClick={() => setConfirming(true)}
-              aria-label={`Eliminar: ${theme.name}`}
+              aria-label={`${action.label}: ${theme.name}`}
             >
-              Eliminar
+              {action.label}
             </button>
-          </div>
-        ))}
+          )}
+        </div>
+      )}
     </article>
   )
 }

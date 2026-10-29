@@ -62,7 +62,7 @@ Déploiement : projet Vercel `memoria-espanol` (compte `tlhuillier1`), relié au
 ## Organisation du code
 
 - `src/types.ts` — modèle de données (spec §4).
-- `src/store/` — interface `ThemeStore` + thèmes intégrés ; implémentation IndexedDB (`idbThemeStore.ts`, toutes les fiches sous une clé, écrites avec `update`) ; instance unique dans `index.ts` ; `useCustomThemes` (état React d'abord, puis écriture) ; classe mémorisée en localStorage (`gradePreference.ts`).
+- `src/store/` — interface `ThemeStore` + thèmes intégrés (`mergeThemes` : un thème intégré modifié est stocké avec le même `id` et remplace l'original ; le supprimer du stockage = « Restaurar ») ; implémentation IndexedDB (`idbThemeStore.ts`, toutes les fiches sous une clé, écrites avec `update`) ; instance unique dans `index.ts` ; `useCustomThemes` (état React d'abord, puis écriture) ; classe mémorisée en localStorage (`gradePreference.ts`).
 - `src/game/` — moteur pur (`engine.ts`), hook des minuteries (`useMemoryGame.ts`), écrans de partie et de fin.
 - `src/home/` — accueil, cartes de thème (suppression confirmée en ligne), pop-up du nombre de mots (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur).
 - `src/editor/` — formulaire de création / modification : brouillon et validation purs (`draft.ts`), import des photos (`readImage.ts`, 360 px max, JPEG 0,82 sur fond blanc), écran `EditorScreen.tsx`.

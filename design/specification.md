@@ -25,9 +25,11 @@ Toutes les pages ont le même fond (crème + trame de points) et un conteneur ce
 - **Grille de cartes de thème** (colonnes auto, 240 px mini) pour la classe choisie. Chaque carte :
   - aperçu des 3 premières images du thème sur un fond teinté propre au thème ;
   - nom en espagnol ; sous-ligne : traduction française (thèmes intégrés seulement) + « · N palabras » ;
-  - badge « Mi tema » pour les thèmes créés ;
+  - badge « Mi tema » pour les thèmes créés, « Modificado » pour un thème intégré modifié ;
   - bouton principal **« Jugar »** → ouvre la pop-up (§2.2) ;
-  - thèmes créés uniquement : liens **« Modificar »** (→ §2.5 prérempli) et **« Eliminar »** → confirmation en ligne dans la carte : « ¿Eliminar este tema? » + boutons **Sí** / **No** (pas de boîte de dialogue navigateur).
+  - tous les thèmes : lien **« Modificar »** (→ §2.5 prérempli : ajouter, supprimer ou modifier des mots, changer le nom ou la classe) ;
+  - thèmes créés : lien **« Eliminar »** → confirmation en ligne dans la carte : « ¿Eliminar este tema? » + boutons **Sí** / **No** (pas de boîte de dialogue navigateur) ;
+  - thèmes intégrés modifiés : lien **« Restaurar »** → confirmation en ligne « ¿Volver al tema original? » + **Sí** / **No** ; Sí remet le thème tel qu'il est livré avec le site.
 - **Carte « Crear un tema »** en dernier (bordure en pointillés, icône +) avec la sous-ligne « Para 5e, con tus propias fotos » → §2.5 vide, classe présélectionnée = classe active.
 - **Message de statut** après enregistrement (bandeau jaune pâle, `role="status"`) : « Tema «La ropa» guardado en 4e. » ; il disparaît à la prochaine action.
 
@@ -112,7 +114,7 @@ interface Theme {
 }
 ```
 
-- **Thèmes intégrés** : `data/themes.json` (lecture seule, non modifiables ni supprimables dans l'UI).
+- **Thèmes intégrés** : `data/themes.json`. Modifiables mais pas supprimables : la version modifiée est enregistrée sur l'appareil avec le même `id` et `builtIn: true`, et remplace l'originale à sa place dans la liste. Elle garde sa teinte, et sa traduction française tant que le nom ne change pas. « Restaurar » efface cette copie.
 - **Thèmes créés** : stockés sur l'appareil (IndexedDB conseillé), dans l'ordre de création.
 - **Classe choisie** : mémorisée sur l'appareil (localStorage suffit).
 - **Découpe article / nom** pour l'affichage des cartes mot : `^(el|la|los|las|un|una|unos|unas)\s+(.+)$` (insensible à la casse). Sans article reconnu, tout le texte est le nom.
@@ -149,7 +151,7 @@ Les lignes entièrement vides sont ignorées. Toute modification du formulaire e
 | Sélecteur | Clase · 5e / 4e / 3e · « N temas » / « 1 tema » |
 | Section | Temas de {clase} |
 | État vide | Todavía no hay temas para {clase}. |
-| Carte thème | N palabras · Mi tema · Jugar · Modificar · Eliminar · ¿Eliminar este tema? · Sí · No |
+| Carte thème | N palabras · Mi tema · Modificado · Jugar · Modificar · Eliminar · ¿Eliminar este tema? · Restaurar · ¿Volver al tema original? · Sí · No |
 | Carte création | Crear un tema · Para {clase}, con tus propias fotos |
 | Pop-up | ¿Con cuántas palabras quieres jugar? · palabras · {2n} cartas · {n} palabras sorteadas entre las {N} del tema · todas las palabras del tema · Cancelar · ¡A jugar! |
 | Partie | Temas · Parejas · Intentos · Tiempo · Gira dos cartas: una palabra y su imagen. |
