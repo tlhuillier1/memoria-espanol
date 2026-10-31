@@ -61,6 +61,19 @@
   outline: none;
 }
 
+/* Teacher mode switch, kept discreet at the bottom of the page */
+.home__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .home__empty {
   margin: 0;
   font-size: 17px;
@@ -204,6 +217,10 @@
   color: var(--danger);
 }
 
+.text-action--quiet {
+  color: var(--muted);
+}
+
 .theme-card__confirm {
   display: flex;
   flex-wrap: wrap;
@@ -215,6 +232,13 @@
   border-radius: var(--radius-field);
   font-size: 15px;
   font-weight: 800;
+}
+
+.theme-card__error {
+  flex-basis: 100%;
+  margin: 0;
+  text-align: center;
+  color: var(--danger-text);
 }
 
 .confirm-button {
@@ -277,7 +301,7 @@
 }
 
 /* Word-count dialog */
-.word-dialog {
+.dialog {
   width: min(480px, calc(100vw - 32px));
   max-width: none;
   padding: 0;
@@ -289,24 +313,24 @@
   overflow: visible;
 }
 
-.word-dialog::backdrop {
+.dialog::backdrop {
   background: var(--overlay);
 }
 
-.word-dialog__box {
+.dialog__box {
   display: flex;
   flex-direction: column;
   gap: 22px;
   padding: 28px;
 }
 
-.word-dialog__heading {
+.dialog__heading {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.word-dialog__heading h2 {
+.dialog__heading h2 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 800;
@@ -375,7 +399,7 @@
   color: var(--ink-soft);
 }
 
-.word-dialog__actions {
+.dialog__actions {
   justify-content: flex-end;
 }
 
@@ -394,15 +418,15 @@
     padding: 6px 12px;
   }
 
-  .word-dialog__box {
+  .dialog__box {
     padding: 22px;
   }
 
-  .word-dialog__heading h2 {
+  .dialog__heading h2 {
     font-size: 26px;
   }
 
-  .word-dialog__actions .btn {
+  .dialog__actions .btn {
     flex: 1 1 auto;
   }
 }

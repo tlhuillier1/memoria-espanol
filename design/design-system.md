@@ -22,7 +22,7 @@ Toutes les valeurs ci-dessous existent en variables dans `tokens.css`.
 | Danger | `--danger` | `#B3321F` | « Eliminar », corbeille, bouton « Sí » |
 | Fond carte mot | `--word-card` | `#FFF4D6` | Face des cartes mot, bandeau de statut |
 | Fond erreur | `--danger-soft` | `#FDE4DF` | Bandeau d'erreur, confirmation de suppression |
-| Badge perso | `--custom-soft` / `--custom-ink` | `#ECE6F7` / `#3E2A78` | Badge « Mi tema », fond d'aperçu des thèmes créés |
+| Badge perso | `--custom-soft` / `--custom-ink` | `#ECE6F7` / `#3E2A78` | Badge « De la profe », fond d'aperçu des thèmes créés |
 
 Teintes d'aperçu des thèmes intégrés : frutas `#FDE4DF`, animales `#FFEFCF`, colegio `#DDE7FA`, tiempo `#DDF0E3` (aussi dans `themes.json`).
 

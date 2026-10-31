@@ -49,14 +49,14 @@ export function WordCountDialog({ theme, onCancel, onConfirm }: WordCountDialogP
   return (
     <dialog
       ref={dialogRef}
-      className="word-dialog"
+      className="dialog"
       aria-labelledby="word-dialog-title"
       aria-describedby="word-dialog-summary"
       onCancel={handleCancelEvent}
       onClick={handleBackdropClick}
     >
-      <div className="word-dialog__box">
-        <div className="word-dialog__heading">
+      <div className="dialog__box">
+        <div className="dialog__heading">
           <span className="eyebrow eyebrow--section">
             {theme.name} · {theme.grade}
           </span>
@@ -111,7 +111,7 @@ export function WordCountDialog({ theme, onCancel, onConfirm }: WordCountDialogP
           {pickerSummary(count, available)}
         </p>
 
-        <div className="button-row word-dialog__actions">
+        <div className="button-row dialog__actions">
           <button type="button" className="btn btn--secondary push" onClick={onCancel}>
             Cancelar
           </button>

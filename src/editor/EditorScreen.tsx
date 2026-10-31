@@ -24,13 +24,15 @@ interface EditorScreenProps {
   /** Preselected grade for a new theme (the active one on the home screen). */
   grade: Grade
   onCancel: () => void
-  onSave: (theme: Theme) => void
+  /** Saves to the database; resolves with an error message when it failed (the form then stays open). */
+  onSave: (theme: Theme) => Promise<string | null>
 }
 
 /** Create / modify a custom theme — spec §2.5. */
 export function EditorScreen({ theme, grade, onCancel, onSave }: EditorScreenProps) {
   const [draft, setDraft] = useState<Draft>(() => (theme ? draftFromTheme(theme) : emptyDraft(grade)))
   const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
   const nameRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
   const wordInputs = useRef(new Map<string, HTMLInputElement>())
@@ -83,10 +85,17 @@ export function EditorScreen({ theme, grade, onCancel, onSave }: EditorScreenPro
       .catch(() => setError(FORM_ERRORS.unreadableImage))
   }
 
-  const save = () => {
+  const save = async () => {
+    if (saving) return
     const result = validateDraft(draft)
-    if (result.ok) onSave(result.theme)
-    else setError(result.error)
+    if (!result.ok) return setError(result.error)
+    setSaving(true)
+    // On success the app leaves this screen; on failure the draft stays as it is.
+    const saveError = await onSave(result.theme)
+    if (saveError) {
+      setSaving(false)
+      setError(saveError)
+    }
   }
 
   return (
@@ -215,8 +224,8 @@ export function EditorScreen({ theme, grade, onCancel, onSave }: EditorScreenPro
           <button type="button" className="btn btn--secondary push" onClick={onCancel}>
             Cancelar
           </button>
-          <button type="submit" className="btn btn--primary push">
-            Guardar el tema
+          <button type="submit" className="btn btn--primary push" disabled={saving} aria-busy={saving}>
+            {saving ? 'Guardando…' : 'Guardar el tema'}
           </button>
         </div>
       </form>
