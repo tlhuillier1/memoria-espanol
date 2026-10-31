@@ -3,15 +3,22 @@ import { ThemeImage } from '../components/ThemeImage'
 import type { Theme } from '../types'
 import { themeSubtitle } from './texts'
 
+const DELETE_ERROR = 'No se ha podido eliminar el tema. Inténtalo de nuevo.'
+
 interface ThemeCardProps {
   theme: Theme
+  /** Teacher mode: show « Modificar » / « Eliminar » on created themes. */
+  editable: boolean
   onPlay: () => void
   onEdit: () => void
-  onDelete: () => void
+  /** Resolves false when the deletion failed (the card then stays, with a message). */
+  onDelete: () => Promise<boolean>
 }
 
-export function ThemeCard({ theme, onPlay, onEdit, onDelete }: ThemeCardProps) {
+export function ThemeCard({ theme, editable, onPlay, onEdit, onDelete }: ThemeCardProps) {
   const [confirming, setConfirming] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteFailed, setDeleteFailed] = useState(false)
   const noRef = useRef<HTMLButtonElement>(null)
   const deleteRef = useRef<HTMLButtonElement>(null)
   const hasOpenedConfirm = useRef(false)
@@ -25,6 +32,16 @@ export function ThemeCard({ theme, onPlay, onEdit, onDelete }: ThemeCardProps) {
       deleteRef.current?.focus()
     }
   }, [confirming])
+
+  const confirmDelete = async () => {
+    setDeleting(true)
+    setDeleteFailed(false)
+    // On success the card disappears; otherwise it stays with the confirmation open.
+    if (!(await onDelete())) {
+      setDeleting(false)
+      setDeleteFailed(true)
+    }
+  }
 
   return (
     <article className="theme-card">
@@ -41,23 +58,38 @@ export function ThemeCard({ theme, onPlay, onEdit, onDelete }: ThemeCardProps) {
           <h3 className="theme-card__name">{theme.name}</h3>
           <p className="theme-card__subtitle">{themeSubtitle(theme)}</p>
         </div>
-        {!theme.builtIn && <span className="badge">Mi tema</span>}
+        {!theme.builtIn && <span className="badge">De la profe</span>}
       </div>
 
       <button type="button" className="btn btn--primary push" onClick={onPlay} aria-label={`Jugar: ${theme.name}`}>
         Jugar
       </button>
 
-      {!theme.builtIn &&
+      {editable &&
+        !theme.builtIn &&
         (confirming ? (
-          <div className="theme-card__confirm">
+          <div className="theme-card__confirm" aria-busy={deleting}>
             <span>¿Eliminar este tema?</span>
-            <button type="button" className="confirm-button confirm-button--yes" onClick={onDelete}>
+            <button type="button" className="confirm-button confirm-button--yes" onClick={confirmDelete} disabled={deleting}>
               Sí
             </button>
-            <button type="button" ref={noRef} className="confirm-button confirm-button--no" onClick={() => setConfirming(false)}>
+            <button
+              type="button"
+              ref={noRef}
+              className="confirm-button confirm-button--no"
+              onClick={() => {
+                setConfirming(false)
+                setDeleteFailed(false)
+              }}
+              disabled={deleting}
+            >
               No
             </button>
+            {deleteFailed && (
+              <p role="alert" className="theme-card__error">
+                {DELETE_ERROR}
+              </p>
+            )}
           </div>
         ) : (
           <div className="theme-card__actions">

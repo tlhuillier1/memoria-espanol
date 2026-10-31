@@ -39,4 +39,5 @@ La copie de sa source est dans `prototype/` — voir `prototype/README.md`.
 - Création de thèmes avec **import de photos** depuis l'appareil, **autant de mots qu'on veut**.
 - Au clic sur « Jugar », une **pop-up** demande le nombre de mots ; les paires sont **tirées au hasard** parmi les mots du thème.
 - Pas de niveaux Facile/Normal, pas de voix.
+- Les thèmes créés sont **en ligne** (base Neon, plan gratuit) et visibles par tous ; **seule la professeure** (un mot de passe unique, lien « Profesora » en pied de page) peut les créer, modifier ou supprimer. Photos stockées dans la base. Les anciens thèmes restés dans les navigateurs (IndexedDB) ne sont pas repris.
 - Style propre au jeu (pas de design system d'entreprise).

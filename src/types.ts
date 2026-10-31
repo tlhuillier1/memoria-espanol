@@ -7,7 +7,7 @@ export const GRADES: readonly Grade[] = ['5e', '4e', '3e']
 export interface ThemeWord {
   /** Spanish word with its article, e.g. "la manzana". */
   word: string
-  /** Asset path relative to the site root (built-in themes) or a data URL (custom themes). */
+  /** Asset path relative to the site root: built-in picto, or stored photo (api/images/<sha256>); a data URL while being edited. */
   image: string
 }
 

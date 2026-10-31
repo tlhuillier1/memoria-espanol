@@ -90,8 +90,7 @@ describe('validateDraft', () => {
 
 describe('savedNotice', () => {
   const theme: Theme = { id: 'x', grade: '4e', name: 'La ropa', builtIn: false, words: [] }
-  it('confirms the save or warns that it only lasts for the session', () => {
-    expect(savedNotice(theme, true)).toBe('Tema «La ropa» guardado en 4e.')
-    expect(savedNotice(theme, false)).toBe('Tema «La ropa» listo para esta sesión, pero el navegador no ha podido guardarlo.')
+  it('confirms the save with the theme grade', () => {
+    expect(savedNotice(theme)).toBe('Tema «La ropa» guardado en 4e.')
   })
 })

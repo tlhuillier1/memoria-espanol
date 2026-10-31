@@ -77,9 +77,13 @@ export function validateDraft(draft: Draft, newId: () => string = () => crypto.r
   }
 }
 
-/** Status shown on the home screen after saving (spec §2.1 and §5). */
-export function savedNotice(theme: Theme, persisted: boolean): string {
-  return persisted
-    ? `Tema «${theme.name}» guardado en ${theme.grade}.`
-    : `Tema «${theme.name}» listo para esta sesión, pero el navegador no ha podido guardarlo.`
+/** Shown in the form when the database did not take the theme (spec §5); the draft is kept. */
+export const SAVE_ERRORS = {
+  failed: 'No se ha podido guardar el tema. Comprueba la conexión e inténtalo de nuevo.',
+  sessionExpired: 'Tu sesión de profesora ha caducado. Vuelve a entrar desde la página de inicio.',
+} as const
+
+/** Status shown on the home screen after saving (spec §2.1). */
+export function savedNotice(theme: Theme): string {
+  return `Tema «${theme.name}» guardado en ${theme.grade}.`
 }

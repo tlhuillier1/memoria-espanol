@@ -1,0 +1,39 @@
+// /api/themes/<uuid> — create or replace (PUT) and delete (DELETE) a theme; teacher only.
+import { deleteOrphanImages } from '../../server/cleanup.js'
+import { db } from '../../server/db.js'
+import { error, json, lastSegment, noContent, readJson, unauthorized } from '../../server/http.js'
+import { isTeacher } from '../../server/session.js'
+import { isThemeId, parseThemeInput, toApiTheme } from '../../server/themes.js'
+
+export async function PUT(request: Request): Promise<Response> {
+  if (!isTeacher(request)) return unauthorized()
+  const id = lastSegment(request)
+  if (!isThemeId(id)) return error(400, 'Invalid theme id')
+  const theme = parseThemeInput(await readJson(request))
+  if (!theme) return error(400, 'Invalid theme')
+
+  const sql = db()
+  const imageIds = [...new Set(theme.words.map((w) => w.imageId))]
+  const [{ found }] = (await sql`select count(*)::int as found from images where id = any(${imageIds})`) as {
+    found: number
+  }[]
+  if (found !== imageIds.length) return error(400, 'Unknown image')
+
+  // A modified theme keeps its creation date, hence its place in the list.
+  await sql`
+    insert into themes (id, grade, name, words)
+    values (${id}, ${theme.grade}, ${theme.name}, ${JSON.stringify(theme.words)}::jsonb)
+    on conflict (id) do update
+      set grade = excluded.grade, name = excluded.name, words = excluded.words, updated_at = now()`
+  await deleteOrphanImages()
+  return json(toApiTheme({ id, ...theme }))
+}
+
+export async function DELETE(request: Request): Promise<Response> {
+  if (!isTeacher(request)) return unauthorized()
+  const id = lastSegment(request)
+  if (!isThemeId(id)) return error(400, 'Invalid theme id')
+  await db()`delete from themes where id = ${id}`
+  await deleteOrphanImages()
+  return noContent()
+}
