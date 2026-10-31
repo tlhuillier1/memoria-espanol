@@ -137,7 +137,7 @@ interface Theme {
 | `GET api/images/<sha256>` | public | la photo |
 | `GET` / `POST` / `DELETE api/session` | public | état / connexion `{ password }` / déconnexion |
 
-Le serveur revalide le thème (classe, nom 1–80 car., 2 à 100 mots de 1–60 car., images existantes). Les photos plus utilisées par aucun thème sont supprimées (après un délai d'une heure).
+Le serveur revalide le thème (classe, nom 1–80 car., 2 à 100 mots de 1–60 car., images existantes). Une photo retirée d'un thème (modification) ou dont le thème est supprimé est effacée **immédiatement**, sauf si un autre thème l'utilise. Les photos envoyées mais jamais rattachées à un thème (enregistrement interrompu) sont effacées au-delà d'une heure, lors d'une écriture suivante.
 - **Classe choisie** : mémorisée sur l'appareil (localStorage suffit).
 - **Découpe article / nom** pour l'affichage des cartes mot : `^(el|la|los|las|un|una|unos|unas)\s+(.+)$` (insensible à la casse). Sans article reconnu, tout le texte est le nom.
 - **Photos importées** : redimensionnées à **360 px max** sur le plus grand côté, fond blanc (pour les PNG transparents), JPEG qualité 0,82.

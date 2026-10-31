@@ -76,6 +76,7 @@ Déploiement : projet Vercel `memoria-espanol` (compte `tlhuillier1`), relié au
 
 - **`img.decode()`** peut rester en attente quand la page ne s'affiche pas (onglet en arrière-plan, panneau masqué) : utiliser `onload` / `onerror`.
 - **`window.scrollTo()`** renvoie une promesse dans les Chrome récents : ne jamais l'écrire en corps d'expression d'un effet (`useEffect(() => window.scrollTo(…))`), React la prend pour une fonction de nettoyage.
+- **CTE Postgres qui modifient des données** : toutes les parties d'une requête `with … delete / insert …` voient les lignes **d'avant** la requête. Dans `api/themes/[id].ts`, « photo encore utilisée par un autre thème » doit donc exclure explicitement le thème en cours (`t.id <> id`).
 - **Le watcher de Vite sous Windows** rate parfois une écriture de fichier : si le navigateur affiche un comportement ancien, vérifier ce que sert `/src/...` et faire `touch` sur le fichier.
 - `src/lib/` — logique pure testable (ex. `splitArticle`), `imageUrl()` pour résoudre les chemins d'images avec la base du site.
 - `src/styles/tokens.css` — **copie** de `design/tokens.css` ; `src/data/themes.json` — copie de `design/data/themes.json` ; `public/assets/` — copie de `design/assets/`. Si le design change, recopier ces fichiers.

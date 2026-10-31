@@ -177,7 +177,7 @@ Le site est alors disponible sur http://localhost:5173. Le serveur de dev sert a
 - **Deux branches Neon** : `main` pour le site en ligne, `dev` pour le développement local et les aperçus des pull requests. Les thèmes de test ne touchent donc pas ceux des élèves.
 - Le schéma est dans `db/schema.sql` ; il peut être rejoué sans risque (`create … if not exists`).
 - Les photos (360 px, JPEG, quelques dizaines de Ko) sont stockées une seule fois et mises en cache un an par les navigateurs et Vercel : la base n'est lue qu'une fois par photo. Le plan gratuit (0,5 Go) en contient plusieurs milliers.
-- Les photos qui ne servent plus à aucun thème sont supprimées automatiquement.
+- Les photos qui ne servent plus à aucun thème sont supprimées : tout de suite quand on supprime ou modifie un thème, et au bout d'une heure pour un envoi abandonné (enregistrement interrompu).
 - Sans connexion, les thèmes intégrés restent jouables ; un message signale que ceux de la professeure n'ont pas pu être chargés.
 
 ---
