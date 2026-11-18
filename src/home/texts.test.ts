@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Theme } from '../types'
-import { pickerSummary, themeCountLabel, themeSubtitle } from './texts'
+import { choiceSummary, pickerSummary, selectedCountLabel, themeCountLabel, themeSubtitle } from './texts'
 
 describe('home texts', () => {
   it('pluralizes the theme count', () => {
@@ -19,5 +19,18 @@ describe('home texts', () => {
   it('summarizes the word-count choice', () => {
     expect(pickerSummary(6, 18)).toBe('12 cartas · 6 palabras sorteadas entre las 18 del tema')
     expect(pickerSummary(6, 6)).toBe('12 cartas · todas las palabras del tema')
+  })
+
+  it('counts the chosen words', () => {
+    expect(selectedCountLabel(0, 18)).toBe('0 de 18 elegidas')
+    expect(selectedCountLabel(1, 18)).toBe('1 de 18 elegida')
+    expect(selectedCountLabel(6, 18)).toBe('6 de 18 elegidas')
+  })
+
+  it('summarizes the chosen words', () => {
+    expect(choiceSummary(0, 18)).toBe('Elige al menos 2 palabras.')
+    expect(choiceSummary(1, 18)).toBe('Elige al menos 2 palabras.')
+    expect(choiceSummary(5, 18)).toBe('10 cartas · 5 palabras elegidas')
+    expect(choiceSummary(18, 18)).toBe('36 cartas · todas las palabras del tema')
   })
 })

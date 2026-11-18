@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 import { SAVE_ERRORS, savedNotice } from './editor/draft'
 import { EditorScreen } from './editor/EditorScreen'
 import { GameScreen } from './game/GameScreen'
+import { gameDeck, type GameDeck } from './game/selection'
 import { HomeScreen } from './home/HomeScreen'
 import { themeStore } from './store'
 import { ApiError } from './store/api'
@@ -13,7 +14,7 @@ import type { Grade, Theme } from './types'
 
 type Screen =
   | { name: 'home' }
-  | { name: 'game'; theme: Theme; wordCount: number }
+  | { name: 'game'; theme: Theme; deck: GameDeck; chosen: boolean }
   | { name: 'editor'; theme?: Theme }
 
 export default function App() {
@@ -92,7 +93,7 @@ export default function App() {
 
   switch (screen.name) {
     case 'game':
-      return <GameScreen theme={screen.theme} wordCount={screen.wordCount} onExit={goHome} />
+      return <GameScreen theme={screen.theme} deck={screen.deck} chosen={screen.chosen} onExit={goHome} />
     case 'editor':
       return <EditorScreen theme={screen.theme} grade={grade} onCancel={goHome} onSave={saveTheme} />
     case 'home':
@@ -104,7 +105,9 @@ export default function App() {
           teacher={teacher}
           notice={notice}
           onGradeChange={changeGrade}
-          onPlay={(theme, wordCount) => setScreen({ name: 'game', theme, wordCount })}
+          onPlay={(theme, choice) =>
+            setScreen({ name: 'game', theme, deck: gameDeck(theme.words, choice), chosen: choice.mode === 'chosen' })
+          }
           onCreate={() => setScreen({ name: 'editor' })}
           onEdit={(theme) => setScreen({ name: 'editor', theme })}
           onDelete={deleteTheme}

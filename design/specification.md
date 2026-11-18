@@ -36,21 +36,28 @@ Toutes les pages ont le même fond (crème + trame de points) et un conteneur ce
 - **Pied de page** : lien discret « Profesora » (→ §2.6) ; en mode professeure : « Modo profesora · Salir ».
 - **Message de statut** après enregistrement (bandeau jaune pâle, `role="status"`) : « Tema «La ropa» guardado en 4e. » ; il disparaît à la prochaine action.
 
-### 2.2 Pop-up « nombre de mots »
+### 2.2 Pop-up « choix des mots »
 
-S'ouvre au clic sur « Jugar ». Voile sombre sur toute la page, boîte centrée 480 px max.
+S'ouvre au clic sur « Jugar ». Voile sombre sur toute la page, boîte centrée 480 px max (hauteur limitée à l'écran moins 32 px ; au-delà, la boîte défile).
 
-- Sur-titre : « Las frutas · 5e » ; titre : « ¿Con cuántas palabras quieres jugar? »
-- **Compteur** : bouton − / grand nombre / bouton +, et sous lui le libellé « palabras ».
-- **Curseur** de 2 à N (N = nombre de mots du thème), avec « 2 » et « N » affichés aux extrémités. Curseur et boutons restent synchronisés.
-- Valeur initiale : **min(6, N)**. Bornes : **2 ≤ n ≤ N** ; les boutons −/+ sont désactivés (opacité 35 %) aux bornes.
-- Ligne d'info : « 12 cartas · 6 palabras sorteadas entre las 18 del tema » ; si n = N : « 12 cartas · todas las palabras del tema ».
+- Sur-titre : « Las frutas · 5e » ; titre selon le mode : « ¿Con cuántas palabras quieres jugar? » (Al azar) ou « ¿Con qué palabras quieres jugar? » (Elegir).
+- **Deux modes**, deux boutons bascule côte à côte (`aria-pressed`, groupe « Cómo elegir las palabras ») : **« Al azar »** (par défaut) et **« Elegir las palabras »**. Ouvert à tous (élèves compris) ; rien n'est enregistré. Chaque mode garde sa valeur quand on passe de l'un à l'autre, jusqu'à la fermeture de la pop-up.
+- **Mode « Al azar »** (le nombre de mots, tirés au hasard) :
+  - **Compteur** : bouton − / grand nombre / bouton +, et sous lui le libellé « palabras ».
+  - **Curseur** de 2 à N (N = nombre de mots du thème), avec « 2 » et « N » affichés aux extrémités. Curseur et boutons restent synchronisés.
+  - Valeur initiale : **min(6, N)**. Bornes : **2 ≤ n ≤ N** ; les boutons −/+ sont désactivés (opacité 35 %) aux bornes.
+  - Ligne d'info : « 12 cartas · 6 palabras sorteadas entre las 18 del tema » ; si n = N : « 12 cartas · todas las palabras del tema ».
+- **Mode « Elegir las palabras »** (les mots eux-mêmes) :
+  - Compteur « 6 de 18 elegidas » (« 1 de 18 elegida ») et deux liens **« Todas »** / **« Ninguna »** (désactivés quand ils ne changent rien).
+  - **Liste à cocher** de tous les mots du thème, dans leur ordre : une tuile par mot (vraie case à cocher dans un `<label>`, vignette, mot complet avec article), 2 colonnes dès que la place le permet. Tuile cochée : fond `--word-card`, contour encre. Au départ, **tous les mots sont cochés**.
+  - Sur ordinateur et tablette, la liste défile dans la pop-up (296 px / 40 % de la hauteur max) ; sous 480 px de large, c'est toute la pop-up qui défile.
+  - Ligne d'info : « 10 cartas · 5 palabras elegidas » ; si tous les mots sont cochés : « 36 cartas · todas las palabras del tema » ; **moins de 2 mots** : « Elige al menos 2 palabras. » (en rouge) et « ¡A jugar! » désactivé.
 - Boutons : **« Cancelar »** (ferme) et **« ¡A jugar! »** (lance la partie).
 - Accessibilité : `role="dialog"`, `aria-modal`, focus placé dans la boîte à l'ouverture, focus piégé, **Échap** et clic sur le voile = Cancelar, focus rendu au bouton « Jugar » à la fermeture.
 
 ### 2.3 Partie
 
-- **En-tête** : bouton « ← Temas » (retour accueil, abandonne la partie) ; sur-titre classe (« 5E ») + nom du thème ; trois pastilles **Parejas** « 2/6 », **Intentos** « 7 », **Tiempo** « 0:42 » ; bouton icône **recommencer** (nouveau tirage, même nombre de mots).
+- **En-tête** : bouton « ← Temas » (retour accueil, abandonne la partie) ; sur-titre classe (« 5E ») + nom du thème ; trois pastilles **Parejas** « 2/6 », **Intentos** « 7 », **Tiempo** « 0:42 » ; bouton icône **recommencer** (nouveau tirage, même nombre de mots ; avec des mots choisis : les mêmes mots, remélangés — libellé « Volver a empezar con las mismas palabras »).
 - **Consigne** : « Gira dos cartas: una palabra y su imagen. »
 - **Plateau** : grille de 2n cartes, format 4:3. Nombre de colonnes selon le nombre de cartes :
 
@@ -71,7 +78,7 @@ Remplace le plateau **900 ms** après la dernière paire trouvée (le temps de v
 - « ¡Enhorabuena! » + « Has encontrado las 6 parejas. »
 - Pastilles **Intentos** et **Tiempo**.
 - « Repasa las palabras » : liste des paires de la partie (vignette + mot complet avec article).
-- Boutons **« Jugar otra vez »** (nouveau tirage, même thème, même nombre) et **« Cambiar de tema »** (accueil).
+- Boutons **« Jugar otra vez »** (nouveau tirage, même thème, même nombre ; avec des mots choisis : mêmes mots remélangés) et **« Cambiar de tema »** (accueil).
 
 ### 2.5 Création / modification d'un thème
 
@@ -99,14 +106,14 @@ Titre « Crear un tema » ou « Modificar el tema ». Bouton « ← Temas ».
 
 ## 3. Règles du jeu
 
-1. Au lancement : tirer **n mots au hasard** parmi ceux du thème, créer pour chacun une carte image et une carte mot, **mélanger** les 2n cartes (Fisher-Yates).
+1. Au lancement : tirer **n mots au hasard** parmi ceux du thème (mode « Al azar ») ou prendre **les mots cochés** (mode « Elegir las palabras »), créer pour chacun une carte image et une carte mot, **mélanger** les 2n cartes (Fisher-Yates).
 2. Clic sur une carte face cachée → elle se retourne. Clic sur une carte déjà visible ou trouvée → rien.
 3. Le **chrono démarre au premier clic**, format `m:ss`.
 4. Quand 2 cartes sont visibles → **Intentos +1** :
    - même mot → **paire trouvée** : les 2 cartes restent visibles, contour vert + pastille coche ; **Parejas +1** ;
    - sinon → contour rouge + petite secousse, puis les 2 cartes se retournent **après 1,1 s** ; les clics sont bloqués pendant ce délai.
 5. Dernière paire → chrono arrêté, écran de fin après 900 ms.
-6. Recommencer / Jugar otra vez = nouveau tirage et nouveau mélange, compteurs remis à zéro.
+6. Recommencer / Jugar otra vez = nouveau tirage et nouveau mélange, compteurs remis à zéro. Avec des mots choisis, les mêmes mots sont gardés et seules les cartes sont remélangées.
 7. Quitter la partie (← Temas) arrête le chrono et annule les minuteries en cours.
 
 ## 4. Modèle de données
@@ -178,8 +185,8 @@ Les lignes entièrement vides sont ignorées. Toute modification du formulaire e
 | Chargement | Cargando los temas… · No se han podido cargar los temas de la profesora. Comprueba la conexión y recarga la página. |
 | Mode professeure | Profesora · Modo profesora · Salir · Acceso profesora · Contraseña · Cancelar · Entrar · Contraseña incorrecta. · Demasiados intentos. Espera 15 minutos y vuelve a intentarlo. · No se ha podido conectar. Comprueba la conexión e inténtalo de nuevo. |
 | Carte création | Crear un tema · Para {clase}, con tus propias fotos |
-| Pop-up | ¿Con cuántas palabras quieres jugar? · palabras · {2n} cartas · {n} palabras sorteadas entre las {N} del tema · todas las palabras del tema · Cancelar · ¡A jugar! |
-| Partie | Temas · Parejas · Intentos · Tiempo · Gira dos cartas: una palabra y su imagen. |
+| Pop-up | ¿Con cuántas palabras quieres jugar? · ¿Con qué palabras quieres jugar? · Al azar · Elegir las palabras · palabras · {2n} cartas · {n} palabras sorteadas entre las {N} del tema · {n} palabras elegidas · todas las palabras del tema · {n} de {N} elegidas · Todas · Ninguna · Elige al menos 2 palabras. · Cancelar · ¡A jugar! |
+| Partie | Temas · Parejas · Intentos · Tiempo · Gira dos cartas: una palabra y su imagen. · Volver a empezar con otras palabras / con las mismas palabras (bouton recommencer) |
 | Fin | ¡Enhorabuena! · Has encontrado las {n} parejas. · Repasa las palabras · Jugar otra vez · Cambiar de tema |
 | Formulaire | Crear un tema · Modificar el tema · Nombre del tema · Ej.: La ropa · Clase · Palabras e imágenes · {k} listas · mínimo 2 · Añadir foto · Palabra {i} · el perro · Añadir una palabra · Cancelar · Guardar el tema · Guardando… |
 | Statut | Tema «{nombre}» guardado en {clase}. · Modo profesora activado: puedes crear, modificar y eliminar temas. · Has salido del modo profesora. |

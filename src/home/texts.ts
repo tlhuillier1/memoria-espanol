@@ -15,6 +15,18 @@ export function themeSubtitle(theme: Theme): string {
   return theme.nameFr ? `${theme.nameFr} · ${words}` : words
 }
 
+/** Counter above the word list of the dialog's « Elegir las palabras » mode. */
+export function selectedCountLabel(selected: number, available: number): string {
+  return `${selected} de ${available} ${selected === 1 ? 'elegida' : 'elegidas'}`
+}
+
+/** Info line of the dialog's « Elegir las palabras » mode. */
+export function choiceSummary(selected: number, available: number): string {
+  if (selected < 2) return 'Elige al menos 2 palabras.'
+  const detail = selected === available ? 'todas las palabras del tema' : `${selected} palabras elegidas`
+  return `${selected * 2} cartas · ${detail}`
+}
+
 /** Info line of the word-count dialog. */
 export function pickerSummary(count: number, available: number): string {
   const detail = count === available ? 'todas las palabras del tema' : `${count} palabras sorteadas entre las ${available} del tema`

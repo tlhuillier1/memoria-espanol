@@ -34,9 +34,9 @@ Le site tient en trois écrans et une pop-up :
 
 ```
 Accueil (classe + thèmes)
- ├─ « Jugar » ──► Pop-up « nombre de mots » ──► Partie ──► Écran de fin
- │                                                 ▲            │
- │                                                 └─ Jugar otra vez
+ ├─ « Jugar » ──► Pop-up « choix des mots » ──► Partie ──► Écran de fin
+ │                                                ▲            │
+ │                                                └─ Jugar otra vez
  ├─ « Crear un tema » / « Modificar » (professeure) ──► Formulaire ──► Accueil
  └─ « Profesora » (pied de page) ──► Mot de passe ──► Accueil en mode professeure
 ```
@@ -54,9 +54,12 @@ Accueil (classe + thèmes)
 - La session dure 30 jours et se prolonge à chaque visite. « Salir » revient au mode élève.
 - Le mot de passe est vérifié par le serveur ; sans session, toute création, modification ou suppression est refusée. Après 10 essais ratés, il faut attendre 15 minutes.
 
-### Pop-up « ¿Con cuántas palabras quieres jugar? »
+### Pop-up de choix des mots
 
-Avant chaque partie, on choisit le nombre de mots, de 2 jusqu'au nombre de mots du thème (6 par défaut). Si le thème contient plus de mots que demandé, ils sont **tirés au hasard** à chaque partie. On peut ainsi créer un grand thème et jouer des parties courtes et toujours différentes.
+Avant chaque partie, deux façons de choisir les mots (deux boutons en haut de la pop-up) :
+
+- **« Al azar »** (par défaut) : on choisit le **nombre** de mots, de 2 jusqu'au nombre de mots du thème (6 par défaut). Si le thème contient plus de mots que demandé, ils sont **tirés au hasard** à chaque partie. On peut ainsi créer un grand thème et jouer des parties courtes et toujours différentes.
+- **« Elegir las palabras »** : on **coche les mots** à mettre dans la partie (tous cochés au départ, liens « Todas » / « Ninguna »). Il en faut au moins 2. Pratique pour réviser seulement les mots vus dans la séance. Ouvert à tous, rien n'est enregistré.
 
 ### Partie
 
@@ -65,11 +68,11 @@ Avant chaque partie, on choisit le nombre de mots, de 2 jusqu'au nombre de mots 
   - si c'est le mot et son image, la paire reste visible (contour vert et coche) ;
   - sinon, les deux cartes tremblent (contour rouge) puis se retournent au bout d'1,1 s.
 - En haut de l'écran : **Parejas** (paires trouvées), **Intentos** (essais) et **Tiempo** (le chrono démarre au premier clic).
-- Le bouton ↻ relance une partie avec un nouveau tirage. « ← Temas » abandonne la partie.
+- Le bouton ↻ relance une partie avec un nouveau tirage (avec des mots choisis : les mêmes mots, remélangés). « ← Temas » abandonne la partie.
 
 ### Écran de fin
 
-Il affiche « ¡Enhorabuena! », le nombre d'essais et le temps, puis la liste **« Repasa las palabras »** (chaque image avec son mot complet). Deux boutons : **« Jugar otra vez »** (nouveau tirage, même thème, même nombre de mots) et **« Cambiar de tema »**.
+Il affiche « ¡Enhorabuena! », le nombre d'essais et le temps, puis la liste **« Repasa las palabras »** (chaque image avec son mot complet). Deux boutons : **« Jugar otra vez »** (nouveau tirage, même thème, même nombre de mots ; avec des mots choisis : les mêmes, remélangés) et **« Cambiar de tema »**.
 
 ### Création et modification d'un thème
 
@@ -141,8 +144,8 @@ Le site est alors disponible sur http://localhost:5173. Le serveur de dev sert a
 │   ├── App.tsx              Navigation entre les écrans, classe active, message de statut
 │   ├── types.ts             Modèle de données (Grade, Theme, ThemeWord)
 │   ├── components/          Petits composants partagés (icônes, sélecteur de classe, pastilles…)
-│   ├── home/                Accueil, cartes de thème, pop-ups du nombre de mots et de connexion
-│   ├── game/                Moteur de jeu pur, hook des minuteries, écran de partie et de fin
+│   ├── home/                Accueil, cartes de thème, pop-ups du choix des mots et de connexion
+│   ├── game/                Moteur de jeu pur, choix des mots, hook des minuteries, écran de partie et de fin
 │   ├── editor/              Formulaire de thème : brouillon, validation, import des photos
 │   ├── store/               Thèmes intégrés, accès à l'API (thèmes, session), classe mémorisée
 │   ├── lib/                 Utilitaires (découpe article / nom, chemins d'images)

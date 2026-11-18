@@ -300,7 +300,7 @@
   color: var(--muted);
 }
 
-/* Word-count dialog */
+/* Pre-game dialog (word count or word choice) */
 .dialog {
   width: min(480px, calc(100vw - 32px));
   max-width: none;
@@ -310,7 +310,9 @@
   border: var(--border);
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-lg);
-  overflow: visible;
+  /* A long word list must not push « ¡A jugar! » off a small screen. */
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
 }
 
 .dialog::backdrop {
@@ -399,8 +401,144 @@
   color: var(--ink-soft);
 }
 
+.word-dialog__summary--warning {
+  color: var(--danger-text);
+}
+
 .dialog__actions {
   justify-content: flex-end;
+}
+
+.dialog .btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+/* « Al azar » / « Elegir las palabras » */
+.mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mode-switch__button {
+  min-height: 48px;
+  padding: 4px 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--border);
+  border-radius: var(--radius-field);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.mode-switch__button[aria-pressed='true'] {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Word list of « Elegir las palabras » */
+.word-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.word-choice__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.word-choice__count {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.word-choice__bulk {
+  display: flex;
+  margin-right: -8px; /* align the underlined text, not the 44 px target, with the list */
+}
+
+.word-choice__bulk .text-action {
+  padding: 0 8px;
+}
+
+.word-choice__bulk .text-action:disabled {
+  color: var(--muted);
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.word-choice__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr));
+  gap: 8px;
+  max-height: min(296px, 40vh);
+  margin: 0;
+  padding: 4px; /* room for the focus outline */
+  overflow-y: auto;
+  list-style: none;
+  border-radius: var(--radius-field);
+  background: var(--paper);
+}
+
+.word-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 2px solid var(--thumb-border);
+  border-radius: var(--radius-field);
+  cursor: pointer;
+}
+
+.word-option:has(.word-option__check:checked) {
+  background: var(--word-card);
+  border-color: var(--ink);
+}
+
+.word-option:has(.word-option__check:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.word-option__check {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* The whole tile carries the focus ring. */
+.word-option__check:focus-visible {
+  outline: none;
+}
+
+.word-option__thumb {
+  width: 40px;
+  height: 40px;
+}
+
+.word-option__word {
+  min-width: 0;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 480px) {
@@ -424,6 +562,12 @@
 
   .dialog__heading h2 {
     font-size: 26px;
+  }
+
+  /* Phones: one scroll (the dialog's) rather than a list scrolling inside a scrolling dialog. */
+  .word-choice__list {
+    max-height: none;
+    overflow: visible;
   }
 
   .dialog__actions .btn {
