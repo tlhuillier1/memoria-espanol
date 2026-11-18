@@ -32,7 +32,7 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 ## Règles de travail
 
 - **Interface en espagnol** (textes exacts dans `specification.md` §7). Code, noms de fichiers et commentaires en anglais ; documentation en français.
-- **Pas de synthèse vocale** (retirée volontairement), **pas de niveaux Facile/Normal** : le nombre de mots se choisit dans la pop-up avant chaque partie.
+- **Pas de synthèse vocale** (retirée volontairement), **pas de niveaux Facile/Normal** : avant chaque partie, la pop-up propose « Al azar » (nombre de mots tirés au hasard) ou « Elegir las palabras » (mots cochés, rejoués à l'identique).
 - Pas d'emoji dans l'interface ; icônes = SVG trait de `design/assets/icons/`.
 - Pas de `alert()` / `confirm()` du navigateur : confirmations en ligne (voir la suppression d'un thème).
 - Accessibilité : vrais `<button>` / `<input>` / `<label>`, cibles ≥ 44 px, contraste ≥ 4,5:1, focus visible, `prefers-reduced-motion` respecté.
@@ -68,8 +68,8 @@ Déploiement : projet Vercel `memoria-espanol` (compte `tlhuillier1`), relié au
 - `src/types.ts` — modèle de données (spec §4).
 - `api/` — fonctions Vercel (une route par fichier, `[id].ts` pour `/<id>`) ; `server/` — code partagé côté serveur (session, validation, accès Neon), imports relatifs **avec `.js`** (ESM Node), vérifié par `tsconfig.api.json`, testé par Vitest (`server/**/*.test.ts`).
 - `src/store/` — interface `ThemeStore` + thèmes intégrés ; `apiThemeStore.ts` (envoie d'abord les nouvelles photos à `api/images`, puis le thème) ; `api.ts` (`apiFetch`, `ApiError` avec le statut HTTP) ; `teacherSession.ts` (connexion) ; `useCustomThemes` (écriture serveur d'abord, puis état React) ; classe mémorisée en localStorage (`gradePreference.ts`).
-- `src/game/` — moteur pur (`engine.ts`), hook des minuteries (`useMemoryGame.ts`), écrans de partie et de fin.
-- `src/home/` — accueil, cartes de thème (suppression confirmée en ligne), pop-ups du nombre de mots et de connexion professeure (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur ; classes CSS communes `.dialog*`).
+- `src/game/` — moteur pur (`engine.ts`), choix des mots de la pop-up → paquet de la partie (`selection.ts` : `WordChoice` → `GameDeck` = mots + nombre à tirer ; avec des mots cochés, nombre = tous, donc « rejouer » garde les mêmes), hook des minuteries (`useMemoryGame.ts`), écrans de partie et de fin.
+- `src/home/` — accueil, cartes de thème (suppression confirmée en ligne), pop-ups du choix des mots (`WordCountDialog`, deux modes) et de connexion professeure (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur ; classes CSS communes `.dialog*`).
 - `src/editor/` — formulaire de création / modification : brouillon et validation purs (`draft.ts`), import des photos (`readImage.ts`, 360 px max, JPEG 0,82 sur fond blanc), écran `EditorScreen.tsx`.
 
 ## Pièges rencontrés

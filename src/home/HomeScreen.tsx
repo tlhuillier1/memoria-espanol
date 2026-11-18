@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { GradePicker } from '../components/GradePicker'
 import { Icon } from '../components/Icon'
+import type { WordChoice } from '../game/selection'
 import type { LoginResult } from '../store/teacherSession'
 import type { LoadStatus } from '../store/useCustomThemes'
 import type { Grade, Theme } from '../types'
@@ -20,7 +21,7 @@ interface HomeScreenProps {
   /** Status after saving a theme; cleared by the next action. */
   notice: string
   onGradeChange: (grade: Grade) => void
-  onPlay: (theme: Theme, wordCount: number) => void
+  onPlay: (theme: Theme, choice: WordChoice) => void
   onCreate: () => void
   onEdit: (theme: Theme) => void
   /** Resolves false when the theme could not be deleted. */
@@ -132,7 +133,7 @@ export function HomeScreen(props: HomeScreenProps) {
         <WordCountDialog
           theme={picking}
           onCancel={() => setPicking(null)}
-          onConfirm={(count) => props.onPlay(picking, count)}
+          onConfirm={(choice) => props.onPlay(picking, choice)}
         />
       )}
     </main>
