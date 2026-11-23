@@ -38,7 +38,7 @@ Accueil (classe + thèmes)
  │                                                ▲            │
  │                                                └─ Jugar otra vez
  ├─ « Crear un tema » / « Modificar » (professeure) ──► Formulaire ──► Accueil
- └─ « Profesora » (pied de page) ──► Mot de passe ──► Accueil en mode professeure
+ └─ Ctrl + Alt + P (caché) ──► Mot de passe ──► Accueil en mode professeure
 ```
 
 ### Accueil
@@ -51,7 +51,7 @@ Accueil (classe + thèmes)
 
 ### Mode professeure
 
-- Lien discret **« Profesora »** en bas de l'accueil → mot de passe → « Modo profesora · Salir ».
+- **Aucun lien visible** pour les élèves : sur l'accueil, la professeure appuie sur **Ctrl + Alt + P** (sur ordinateur) → mot de passe → « Modo profesora · Salir » en bas de page.
 - La session dure 30 jours et se prolonge à chaque visite. « Salir » revient au mode élève.
 - Le mot de passe est vérifié par le serveur ; sans session, toute création, modification, suppression ou tout masquage est refusé. Après 10 essais ratés, il faut attendre 15 minutes.
 

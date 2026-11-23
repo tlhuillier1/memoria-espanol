@@ -61,7 +61,7 @@
   outline: none;
 }
 
-/* Teacher mode switch, kept discreet at the bottom of the page */
+/* « Modo profesora · Salir », shown only in teacher mode (the login opens with Ctrl + Alt + P) */
 .home__footer {
   display: flex;
   flex-wrap: wrap;

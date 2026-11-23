@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { GradePicker } from '../components/GradePicker'
 import { Icon } from '../components/Icon'
 import type { WordChoice } from '../game/selection'
@@ -6,6 +6,7 @@ import type { LoginResult } from '../store/teacherSession'
 import type { LoadStatus } from '../store/useCustomThemes'
 import type { Grade, Theme } from '../types'
 import { LoginDialog } from './LoginDialog'
+import { isTeacherShortcut } from './teacherShortcut'
 import { themeCountLabel } from './texts'
 import { ThemeCard } from './ThemeCard'
 import { visibleThemes } from './visibility'
@@ -52,10 +53,29 @@ export function HomeScreen(props: HomeScreenProps) {
     return deleted
   }
 
+  // No visible entry for students: the teacher opens the login with Ctrl + Alt + P (spec §2.6).
+  // Not while the word-count dialog is open, so two modals never stack.
+  useEffect(() => {
+    if (teacher || picking) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!isTeacherShortcut(event)) return
+      event.preventDefault()
+      setLoggingIn(true)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [teacher, picking])
+
   const handleLogin = async (password: string) => {
     const result = await props.onLogin(password)
     if (result === 'ok') setLoggingIn(false)
     return result
+  }
+
+  const handleLogout = () => {
+    props.onLogout()
+    // « Salir » disappears with teacher mode: keep keyboard focus in the page.
+    sectionTitleRef.current?.focus()
   }
 
   return (
@@ -124,17 +144,14 @@ export function HomeScreen(props: HomeScreenProps) {
         </div>
       </section>
 
-      <footer className="home__footer">
-        {teacher && <span>Modo profesora</span>}
-        {/* One button whose label changes, so keyboard focus stays on it after logging in or out. */}
-        <button
-          type="button"
-          className="text-action text-action--quiet"
-          onClick={teacher ? props.onLogout : () => setLoggingIn(true)}
-        >
-          {teacher ? 'Salir' : 'Profesora'}
-        </button>
-      </footer>
+      {teacher && (
+        <footer className="home__footer">
+          <span>Modo profesora</span>
+          <button type="button" className="text-action text-action--quiet" onClick={handleLogout}>
+            Salir
+          </button>
+        </footer>
+      )}
 
       {loggingIn && <LoginDialog onCancel={() => setLoggingIn(false)} onLogin={handleLogin} />}
 
