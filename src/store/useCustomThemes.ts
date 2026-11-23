@@ -5,11 +5,12 @@ import type { ThemeStore } from './ThemeStore'
 export type LoadStatus = 'loading' | 'ready' | 'error'
 
 /**
- * Themes created by the teacher, loaded from the store.
- * Writes go to the store first: the list only changes once the database has the change.
+ * Themes created by the teacher, and the ids of the themes she hid from the students, loaded from the store.
+ * Writes go to the store first: the state only changes once the database has the change.
  */
 export function useCustomThemes(store: ThemeStore) {
   const [themes, setThemes] = useState<Theme[]>([])
+  const [hidden, setHiddenIds] = useState<string[]>([])
   const [status, setStatus] = useState<LoadStatus>('loading')
 
   useEffect(() => {
@@ -18,7 +19,8 @@ export function useCustomThemes(store: ThemeStore) {
       .list()
       .then((list) => {
         if (!alive) return
-        setThemes(list)
+        setThemes(list.themes)
+        setHiddenIds(list.hidden)
         setStatus('ready')
       })
       .catch(() => {
@@ -45,9 +47,19 @@ export function useCustomThemes(store: ThemeStore) {
     async (id: string) => {
       await store.remove(id)
       setThemes((list) => list.filter((t) => t.id !== id))
+      setHiddenIds((ids) => ids.filter((h) => h !== id))
     },
     [store],
   )
 
-  return { themes, status, save, remove }
+  /** Rejects with an ApiError when the change could not be saved. */
+  const setHidden = useCallback(
+    async (id: string, hide: boolean) => {
+      await store.setHidden(id, hide)
+      setHiddenIds((ids) => (hide ? (ids.includes(id) ? ids : [...ids, id]) : ids.filter((h) => h !== id)))
+    },
+    [store],
+  )
+
+  return { themes, hidden, status, save, remove, setHidden }
 }

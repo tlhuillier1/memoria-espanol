@@ -1,6 +1,6 @@
 import type { Theme, ThemeWord } from '../types'
 import { apiFetch, jsonBody } from './api'
-import type { ThemeStore } from './ThemeStore'
+import type { ThemeList, ThemeStore } from './ThemeStore'
 
 /** Theme as sent by api/themes: photos are already URLs (api/images/<sha256>). */
 type ApiTheme = Pick<Theme, 'id' | 'grade' | 'name' | 'words'>
@@ -19,13 +19,14 @@ const storedWord = async (word: ThemeWord): Promise<ThemeWord> =>
 
 /** Themes in the Neon database, through the functions of api/. Reading is public; writing needs the teacher session. */
 export function createApiThemeStore(): ThemeStore {
-  const list = async () => {
+  const list = async (): Promise<ThemeList> => {
     const response = await apiFetch('themes')
-    return ((await response.json()) as { themes: ApiTheme[] }).themes.map(toTheme)
+    const data = (await response.json()) as { themes: ApiTheme[]; hidden?: string[] }
+    return { themes: data.themes.map(toTheme), hidden: data.hidden ?? [] }
   }
   return {
     list,
-    get: async (id) => (await list()).find((t) => t.id === id),
+    get: async (id) => (await list()).themes.find((t) => t.id === id),
     save: async (theme) => {
       const words = await Promise.all(theme.words.map(storedWord))
       const body = { grade: theme.grade, name: theme.name, words }
@@ -34,6 +35,9 @@ export function createApiThemeStore(): ThemeStore {
     },
     remove: async (id) => {
       await apiFetch(`themes/${id}`, { method: 'DELETE' })
+    },
+    setHidden: async (id, hidden) => {
+      await apiFetch(`hidden/${encodeURIComponent(id)}`, { method: hidden ? 'PUT' : 'DELETE' })
     },
   }
 }

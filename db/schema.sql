@@ -25,3 +25,10 @@ create table if not exists login_failures (
   at timestamptz not null default now()
 );
 create index if not exists login_failures_ip_at on login_failures (ip, at);
+
+-- Themes hidden from the students by the teacher: a built-in theme ('frutas') or a created one (UUID).
+-- No foreign key, since built-in themes are not in the database; deleting a theme removes its row.
+create table if not exists hidden_themes (
+  theme_id  text primary key check (theme_id ~ '^[a-z0-9-]{1,40}$'),
+  hidden_at timestamptz not null default now()
+);

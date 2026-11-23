@@ -182,6 +182,14 @@
   color: var(--muted);
 }
 
+.theme-card__badges {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
 .badge {
   flex: 0 0 auto;
   padding: 4px 10px;
@@ -192,15 +200,44 @@
   font-weight: 800;
 }
 
+/* Hidden from the students: only the teacher sees it, greyed out but still readable and playable. */
+.badge--hidden {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.theme-card--hidden {
+  box-shadow: none;
+}
+
+.theme-card--hidden .theme-card__preview {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
 .theme-card .btn {
   min-height: 50px;
   font-size: 21px;
+}
+
+.theme-card__teacher {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .theme-card__actions {
   display: flex;
   justify-content: center;
   gap: 8px;
+}
+
+.text-action[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: progress;
 }
 
 .text-action {

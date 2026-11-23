@@ -32,3 +32,13 @@ export function pickerSummary(count: number, available: number): string {
   const detail = count === available ? 'todas las palabras del tema' : `${count} palabras sorteadas entre las ${available} del tema`
   return `${count * 2} cartas · ${detail}`
 }
+
+/** Status message after the teacher hides or shows a theme. */
+export function visibilityNotice(theme: Theme, hidden: boolean): string {
+  return hidden ? `Tema «${theme.name}» oculto para los alumnos.` : `Tema «${theme.name}» visible para los alumnos.`
+}
+
+/** Error under the card's actions when hiding or showing failed. */
+export function visibilityError(hide: boolean): string {
+  return `No se ha podido ${hide ? 'ocultar' : 'mostrar'} el tema. Inténtalo de nuevo.`
+}

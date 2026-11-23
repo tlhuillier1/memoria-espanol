@@ -4,6 +4,7 @@ import { EditorScreen } from './editor/EditorScreen'
 import { GameScreen } from './game/GameScreen'
 import { gameDeck, type GameDeck } from './game/selection'
 import { HomeScreen } from './home/HomeScreen'
+import { visibilityNotice } from './home/texts'
 import { themeStore } from './store'
 import { ApiError } from './store/api'
 import { loadGrade, saveGrade } from './store/gradePreference'
@@ -24,6 +25,7 @@ export default function App() {
   const [teacher, setTeacher] = useState(false)
   const customThemes = useCustomThemes(themeStore)
   const themes = [...builtInThemes, ...customThemes.themes]
+  const hidden = new Set(customThemes.hidden)
   const goHome = () => setScreen({ name: 'home' })
 
   useEffect(() => {
@@ -74,11 +76,23 @@ export default function App() {
     }
   }
 
+  /** Status message on success (spec §2.1); false when the change could not be saved. */
+  const setThemeHidden = async (theme: Theme, hide: boolean): Promise<boolean> => {
+    try {
+      await customThemes.setHidden(theme.id, hide)
+    } catch (error) {
+      sessionLost(error)
+      return false
+    }
+    setNotice(visibilityNotice(theme, hide))
+    return true
+  }
+
   const logIn = async (password: string) => {
     const result = await login(password)
     if (result === 'ok') {
       setTeacher(true)
-      setNotice('Modo profesora activado: puedes crear, modificar y eliminar temas.')
+      setNotice('Modo profesora activado: puedes crear, modificar, ocultar y eliminar temas.')
     }
     return result
   }
@@ -101,6 +115,7 @@ export default function App() {
         <HomeScreen
           grade={grade}
           themes={themes}
+          hidden={hidden}
           loadStatus={customThemes.status}
           teacher={teacher}
           notice={notice}
@@ -111,6 +126,7 @@ export default function App() {
           onCreate={() => setScreen({ name: 'editor' })}
           onEdit={(theme) => setScreen({ name: 'editor', theme })}
           onDelete={deleteTheme}
+          onSetHidden={setThemeHidden}
           onLogin={logIn}
           onLogout={logOut}
           onDismissNotice={() => setNotice('')}

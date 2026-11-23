@@ -47,12 +47,13 @@ Accueil (classe + thèmes)
 - **Cartes de thème** : aperçu de trois images, nom en espagnol, traduction française pour les thèmes intégrés, nombre de mots.
 - Les thèmes créés par la professeure portent le badge **« De la profe »**.
 - **En mode professeure** seulement : liens **« Modificar »** et **« Eliminar »** sur ces thèmes (la suppression se confirme dans la carte : « ¿Eliminar este tema? Sí / No »), et carte **« Crear un tema »**, qui ouvre le formulaire avec la classe affichée déjà sélectionnée.
+- **Cacher un thème** (mode professeure) : lien **« Ocultar »** sur chaque carte, thèmes intégrés compris. Un thème caché disparaît pour les élèves, sur tous les appareils (il ne compte plus non plus dans « N temas »). La professeure le voit toujours, grisé avec le badge **« Oculto »**, peut y jouer, et le ré-affiche avec **« Mostrar »**. Un thème créé est visible dès son enregistrement.
 
 ### Mode professeure
 
 - Lien discret **« Profesora »** en bas de l'accueil → mot de passe → « Modo profesora · Salir ».
 - La session dure 30 jours et se prolonge à chaque visite. « Salir » revient au mode élève.
-- Le mot de passe est vérifié par le serveur ; sans session, toute création, modification ou suppression est refusée. Après 10 essais ratés, il faut attendre 15 minutes.
+- Le mot de passe est vérifié par le serveur ; sans session, toute création, modification, suppression ou tout masquage est refusé. Après 10 essais ratés, il faut attendre 15 minutes.
 
 ### Pop-up de choix des mots
 
@@ -160,7 +161,7 @@ Le site est alors disponible sur http://localhost:5173. Le serveur de dev sert a
 - **La logique est séparée de l'affichage.**
   - `game/engine.ts` (tirage, mélange, paires, victoire) et `editor/draft.ts` (validation du formulaire) sont des fonctions pures, testées sans navigateur.
   - Les composants React ne font qu'afficher l'état et transmettre les clics.
-- **Un seul point d'accès aux thèmes créés** : l'interface `ThemeStore` (`list`, `get`, `save`, `remove`). L'implémentation actuelle (`apiThemeStore.ts`) appelle les fonctions de `api/`.
+- **Un seul point d'accès aux thèmes créés** : l'interface `ThemeStore` (`list` — thèmes créés + ids cachés —, `get`, `save`, `remove`, `setHidden`). L'implémentation actuelle (`apiThemeStore.ts`) appelle les fonctions de `api/`.
 - **Images** : toujours passer par `imageUrl()` (`src/lib/assets.ts`), jamais par un chemin absolu `/assets/…`. Le site est construit avec une base relative (`base: './'`) pour fonctionner dans n'importe quel sous-dossier.
 - **Langues** : textes de l'interface en espagnol ; code, noms de fichiers et commentaires en anglais ; documentation en français.
 
@@ -172,6 +173,7 @@ Le site est alors disponible sur http://localhost:5173. Le serveur de dev sert a
 |---|---|---|
 | Thèmes intégrés | `src/data/themes.json` + `public/assets/pictos/` | Livrés avec le site, non modifiables dans l'interface |
 | Thèmes créés (avec leurs photos) | Base Neon, projet `memoria-espanol` | Visibles par tous ; écriture réservée à la professeure |
+| Thèmes cachés aux élèves | Base Neon, table `hidden_themes` | Ids de thèmes intégrés ou créés ; écriture réservée à la professeure |
 | Session de la professeure | Cookie signé (HttpOnly) | 30 jours, prolongés à chaque visite |
 | Classe choisie | `localStorage` (clé `memoria-grade`) | Préférence de confort |
 
