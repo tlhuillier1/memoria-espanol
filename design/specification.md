@@ -11,7 +11,7 @@ Accueil (choix de la classe + thèmes)
  │                                                 └─ Jugar otra vez
  ├─ « Crear un tema » / « Modificar » (professeure) ──► Création / modification ──► Accueil
  ├─ « Ocultar » / « Mostrar » (professeure) ──► thème caché / ré-affiché pour les élèves
- └─ « Profesora » ──► Pop-up « Acceso profesora » ──► Accueil en mode professeure
+ └─ Raccourci Ctrl + Alt + P (aucun lien visible) ──► Pop-up « Acceso profesora » ──► Accueil en mode professeure
 ```
 
 Les thèmes intégrés sont livrés avec le site ; les thèmes créés par la professeure sont stockés en ligne et visibles par tous. **Seule la professeure**, connectée en « modo profesora », peut créer, modifier, cacher ou supprimer un thème (§2.6), y compris cacher un thème intégré.
@@ -36,7 +36,7 @@ Toutes les pages ont le même fond (crème + trame de points) et un conteneur ce
   - thèmes créés, **en mode professeure uniquement** : liens **« Modificar »** (→ §2.5 prérempli) et **« Eliminar »** → confirmation en ligne dans la carte : « ¿Eliminar este tema? » + boutons **Sí** / **No** (pas de boîte de dialogue navigateur). Pendant la suppression, Sí / No sont désactivés ; en cas d'échec la carte reste avec « No se ha podido eliminar el tema. Inténtalo de nuevo. ».
 - **Carte « Crear un tema »** (mode professeure uniquement) en dernier (bordure en pointillés, icône +) avec la sous-ligne « Para 5e, con tus propias fotos » → §2.5 vide, classe présélectionnée = classe active.
 - **Chargement** des thèmes créés : tant qu'ils arrivent et que la classe n'a aucun thème, « Cargando los temas… » remplace l'état vide. En cas d'échec (hors ligne…), bandeau rouge « No se han podido cargar los temas de la profesora. Comprueba la conexión y recarga la página. » ; les thèmes intégrés restent jouables.
-- **Pied de page** : lien discret « Profesora » (→ §2.6) ; en mode professeure : « Modo profesora · Salir ».
+- **Pied de page** : en mode professeure seulement, « Modo profesora · Salir ». En mode élève, rien : aucun accès visible au mode professeure (→ §2.6).
 - **Message de statut** après enregistrement (bandeau jaune pâle, `role="status"`) : « Tema «La ropa» guardado en 4e. » ; il disparaît à la prochaine action.
 
 ### 2.2 Pop-up « choix des mots »
@@ -101,10 +101,10 @@ Titre « Crear un tema » ou « Modificar el tema ». Bouton « ← Temas ».
 
 ### 2.6 Mode professeure
 
-- Lien « Profesora » en pied de page de l'accueil → pop-up modale (`<dialog>`) « Acceso profesora » : champ « Contraseña », boutons « Cancelar » / « Entrar ».
+- **Accès caché** : aucun lien ni bouton visible pour les élèves (pour ne pas leur donner envie de chercher le mot de passe). Sur l'accueil, le raccourci **Ctrl + Alt + P** (touche physique P, quelle que soit la disposition du clavier ; inactif pendant la pop-up du choix des mots) ouvre la pop-up modale (`<dialog>`) « Acceso profesora » : champ « Contraseña », boutons « Cancelar » / « Entrar ». Accès prévu sur ordinateur ; pas d'accès sur tablette sans clavier.
 - **Un seul mot de passe**, vérifié par le serveur (variable d'environnement `TEACHER_PASSWORD`, jamais dans le code du site). Erreurs : « Contraseña incorrecta. » ; après 10 échecs en 15 min depuis la même adresse : « Demasiados intentos. Espera 15 minutos y vuelve a intentarlo. » ; serveur injoignable : « No se ha podido conectar. Comprueba la conexión e inténtalo de nuevo. »
 - Connexion réussie : la pop-up se ferme, statut « Modo profesora activado: puedes crear, modificar, ocultar y eliminar temas. ». La session dure **30 jours, prolongés à chaque visite** (cookie signé, inaccessible aux scripts). Changer le mot de passe déconnecte toutes les sessions.
-- « Salir » : retour au mode élève, statut « Has salido del modo profesora. ».
+- « Salir » : retour au mode élève, statut « Has salido del modo profesora. » ; le pied de page disparaît et le focus passe au titre « Temas de … ».
 - Sans session, les liens d'édition et la carte « Crear un tema » sont masqués, **et le serveur refuse toute écriture** (le masquage n'est pas la protection).
 
 ## 3. Règles du jeu
@@ -189,7 +189,7 @@ Les lignes entièrement vides sont ignorées. Toute modification du formulaire e
 | État vide | Todavía no hay temas para {clase}. |
 | Carte thème | N palabras · De la profe · Oculto · Jugar · Modificar · Ocultar · Mostrar · Eliminar · No se ha podido ocultar el tema. Inténtalo de nuevo. · No se ha podido mostrar el tema. Inténtalo de nuevo. · ¿Eliminar este tema? · Sí · No · No se ha podido eliminar el tema. Inténtalo de nuevo. |
 | Chargement | Cargando los temas… · No se han podido cargar los temas de la profesora. Comprueba la conexión y recarga la página. |
-| Mode professeure | Profesora · Modo profesora · Salir · Acceso profesora · Contraseña · Cancelar · Entrar · Contraseña incorrecta. · Demasiados intentos. Espera 15 minutos y vuelve a intentarlo. · No se ha podido conectar. Comprueba la conexión e inténtalo de nuevo. |
+| Mode professeure | Modo profesora · Salir · Acceso profesora · Contraseña · Cancelar · Entrar · Contraseña incorrecta. · Demasiados intentos. Espera 15 minutos y vuelve a intentarlo. · No se ha podido conectar. Comprueba la conexión e inténtalo de nuevo. |
 | Carte création | Crear un tema · Para {clase}, con tus propias fotos |
 | Pop-up | ¿Con cuántas palabras quieres jugar? · ¿Con qué palabras quieres jugar? · Al azar · Elegir las palabras · palabras · {2n} cartas · {n} palabras sorteadas entre las {N} del tema · {n} palabras elegidas · todas las palabras del tema · {n} de {N} elegidas · Todas · Ninguna · Elige al menos 2 palabras. · Cancelar · ¡A jugar! |
 | Partie | Temas · Parejas · Intentos · Tiempo · Gira dos cartas: una palabra y su imagen. · Volver a empezar con otras palabras / con las mismas palabras (bouton recommencer) |
