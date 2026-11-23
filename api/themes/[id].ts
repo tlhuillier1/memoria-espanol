@@ -51,8 +51,10 @@ export async function DELETE(request: Request): Promise<Response> {
   const id = lastSegment(request)
   if (!isThemeId(id)) return error(400, 'Invalid theme id')
 
-  // The theme and its photos go together.
-  await db()`
+  // The theme and its photos go together, and so does its « hidden » mark (no foreign key: see db/schema.sql).
+  const sql = db()
+  await sql`delete from hidden_themes where theme_id = ${id.toLowerCase()}`
+  await sql`
     with removed as (
       delete from themes where id = ${id} returning words
     )

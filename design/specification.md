@@ -10,10 +10,11 @@ Accueil (choix de la classe + thèmes)
  │                                                 ▲            │
  │                                                 └─ Jugar otra vez
  ├─ « Crear un tema » / « Modificar » (professeure) ──► Création / modification ──► Accueil
+ ├─ « Ocultar » / « Mostrar » (professeure) ──► thème caché / ré-affiché pour les élèves
  └─ « Profesora » ──► Pop-up « Acceso profesora » ──► Accueil en mode professeure
 ```
 
-Les thèmes intégrés sont livrés avec le site ; les thèmes créés par la professeure sont stockés en ligne et visibles par tous. **Seule la professeure**, connectée en « modo profesora », peut créer, modifier ou supprimer un thème (§2.6).
+Les thèmes intégrés sont livrés avec le site ; les thèmes créés par la professeure sont stockés en ligne et visibles par tous. **Seule la professeure**, connectée en « modo profesora », peut créer, modifier, cacher ou supprimer un thème (§2.6), y compris cacher un thème intégré.
 
 Toutes les pages ont le même fond (crème + trame de points) et un conteneur centré de 1080 px max, marges latérales 20 px.
 
@@ -22,7 +23,7 @@ Toutes les pages ont le même fond (crème + trame de points) et un conteneur ce
 ### 2.1 Accueil
 
 - **Titre** « ¡Memoria! » (les « ¡ » et « ! » en rouge), sous-titre « Encuentra las parejas: cada palabra con su imagen. »
-- **Sélecteur de classe** (libellé « Clase ») : trois gros boutons **5e / 4e / 3e**, chacun affiche le nombre de thèmes (« 4 temas », « 1 tema », « 0 temas »). Un seul actif (fond bleu). Le choix est **mémorisé** sur l'appareil. 5e par défaut.
+- **Sélecteur de classe** (libellé « Clase ») : trois gros boutons **5e / 4e / 3e**, chacun affiche le nombre de thèmes (« 4 temas », « 1 tema », « 0 temas ») — pour les élèves, sans les thèmes cachés. Un seul actif (fond bleu). Le choix est **mémorisé** sur l'appareil. 5e par défaut.
 - **Titre de section** « Temas de 5e » (selon la classe).
 - **État vide** : « Todavía no hay temas para 4e. » (la carte « Crear un tema » reste affichée).
 - **Grille de cartes de thème** (colonnes auto, 240 px mini) pour la classe choisie. Chaque carte :
@@ -30,6 +31,8 @@ Toutes les pages ont le même fond (crème + trame de points) et un conteneur ce
   - nom en espagnol ; sous-ligne : traduction française (thèmes intégrés seulement) + « · N palabras » ;
   - badge « De la profe » pour les thèmes créés ;
   - bouton principal **« Jugar »** → ouvre la pop-up (§2.2) ;
+  - **tous les thèmes (intégrés compris), en mode professeure uniquement** : lien **« Ocultar »** (ou **« Mostrar »** si le thème est caché), sur sa propre ligne en bas de la carte, toujours au même endroit. Pas de confirmation (l'action se défait d'un clic) ; le lien reste le même bouton (le focus clavier y reste), inactif (`aria-disabled`) pendant l'envoi. Succès : message de statut « Tema «Las frutas» oculto para los alumnos. » / « Tema «Las frutas» visible para los alumnos. » ; échec : sous le lien, « No se ha podido ocultar el tema. Inténtalo de nuevo. » (ou « mostrar »).
+  - **thème caché** : invisible pour les élèves (grille et compteurs) ; en mode professeure, il reste à sa place, aperçu grisé, sans ombre, avec le badge **« Oculto »** (icône `eye-off`), et reste jouable. Un thème créé est visible dès son enregistrement.
   - thèmes créés, **en mode professeure uniquement** : liens **« Modificar »** (→ §2.5 prérempli) et **« Eliminar »** → confirmation en ligne dans la carte : « ¿Eliminar este tema? » + boutons **Sí** / **No** (pas de boîte de dialogue navigateur). Pendant la suppression, Sí / No sont désactivés ; en cas d'échec la carte reste avec « No se ha podido eliminar el tema. Inténtalo de nuevo. ».
 - **Carte « Crear un tema »** (mode professeure uniquement) en dernier (bordure en pointillés, icône +) avec la sous-ligne « Para 5e, con tus propias fotos » → §2.5 vide, classe présélectionnée = classe active.
 - **Chargement** des thèmes créés : tant qu'ils arrivent et que la classe n'a aucun thème, « Cargando los temas… » remplace l'état vide. En cas d'échec (hors ligne…), bandeau rouge « No se han podido cargar los temas de la profesora. Comprueba la conexión y recarga la página. » ; les thèmes intégrés restent jouables.
@@ -100,7 +103,7 @@ Titre « Crear un tema » ou « Modificar el tema ». Bouton « ← Temas ».
 
 - Lien « Profesora » en pied de page de l'accueil → pop-up modale (`<dialog>`) « Acceso profesora » : champ « Contraseña », boutons « Cancelar » / « Entrar ».
 - **Un seul mot de passe**, vérifié par le serveur (variable d'environnement `TEACHER_PASSWORD`, jamais dans le code du site). Erreurs : « Contraseña incorrecta. » ; après 10 échecs en 15 min depuis la même adresse : « Demasiados intentos. Espera 15 minutos y vuelve a intentarlo. » ; serveur injoignable : « No se ha podido conectar. Comprueba la conexión e inténtalo de nuevo. »
-- Connexion réussie : la pop-up se ferme, statut « Modo profesora activado: puedes crear, modificar y eliminar temas. ». La session dure **30 jours, prolongés à chaque visite** (cookie signé, inaccessible aux scripts). Changer le mot de passe déconnecte toutes les sessions.
+- Connexion réussie : la pop-up se ferme, statut « Modo profesora activado: puedes crear, modificar, ocultar y eliminar temas. ». La session dure **30 jours, prolongés à chaque visite** (cookie signé, inaccessible aux scripts). Changer le mot de passe déconnecte toutes les sessions.
 - « Salir » : retour au mode élève, statut « Has salido del modo profesora. ».
 - Sans session, les liens d'édition et la carte « Crear un tema » sont masqués, **et le serveur refuse toute écriture** (le masquage n'est pas la protection).
 
@@ -133,13 +136,16 @@ interface Theme {
 ```
 
 - **Thèmes intégrés** : `data/themes.json` (lecture seule, non modifiables ni supprimables dans l'UI).
+- **Thèmes cachés** : table `hidden_themes` (id d'un thème intégré, ex. `frutas`, ou UUID d'un thème créé). La liste est publique (renvoyée avec les thèmes) : ce sont les écrans élèves qui laissent ces thèmes de côté ; supprimer un thème efface aussi sa ligne.
 - **Thèmes créés** : base Postgres **Neon**, lue et écrite par les fonctions Vercel de `api/`, dans l'ordre de création. `id` = UUID ; les images sont des URL `api/images/<sha256>` (photo stockée une fois, en cache un an). Schéma : `db/schema.sql`.
 
 | Route | Accès | Rôle |
 |---|---|---|
-| `GET api/themes` | public | thèmes créés `{ themes: [{ id, grade, name, words: [{ word, image }] }] }` |
+| `GET api/themes` | public | thèmes créés et ids cachés `{ themes: [{ id, grade, name, words: [{ word, image }] }], hidden: ["frutas", "<uuid>"] }` |
 | `PUT api/themes/<uuid>` | professeure | crée ou remplace (`{ grade, name, words }`, images déjà envoyées) |
 | `DELETE api/themes/<uuid>` | professeure | supprime |
+| `PUT api/hidden/<id>` | professeure | cache le thème (intégré ou créé ; 404 si l'UUID n'existe pas) |
+| `DELETE api/hidden/<id>` | professeure | le ré-affiche |
 | `POST api/images` | professeure | corps = JPEG (≤ 1 Mo) → `{ image: "api/images/<sha256>" }` |
 | `GET api/images/<sha256>` | public | la photo |
 | `GET` / `POST` / `DELETE api/session` | public | état / connexion `{ password }` / déconnexion |
@@ -181,7 +187,7 @@ Les lignes entièrement vides sont ignorées. Toute modification du formulaire e
 | Sélecteur | Clase · 5e / 4e / 3e · « N temas » / « 1 tema » |
 | Section | Temas de {clase} |
 | État vide | Todavía no hay temas para {clase}. |
-| Carte thème | N palabras · De la profe · Jugar · Modificar · Eliminar · ¿Eliminar este tema? · Sí · No · No se ha podido eliminar el tema. Inténtalo de nuevo. |
+| Carte thème | N palabras · De la profe · Oculto · Jugar · Modificar · Ocultar · Mostrar · Eliminar · No se ha podido ocultar el tema. Inténtalo de nuevo. · No se ha podido mostrar el tema. Inténtalo de nuevo. · ¿Eliminar este tema? · Sí · No · No se ha podido eliminar el tema. Inténtalo de nuevo. |
 | Chargement | Cargando los temas… · No se han podido cargar los temas de la profesora. Comprueba la conexión y recarga la página. |
 | Mode professeure | Profesora · Modo profesora · Salir · Acceso profesora · Contraseña · Cancelar · Entrar · Contraseña incorrecta. · Demasiados intentos. Espera 15 minutos y vuelve a intentarlo. · No se ha podido conectar. Comprueba la conexión e inténtalo de nuevo. |
 | Carte création | Crear un tema · Para {clase}, con tus propias fotos |
@@ -189,7 +195,7 @@ Les lignes entièrement vides sont ignorées. Toute modification du formulaire e
 | Partie | Temas · Parejas · Intentos · Tiempo · Gira dos cartas: una palabra y su imagen. · Volver a empezar con otras palabras / con las mismas palabras (bouton recommencer) |
 | Fin | ¡Enhorabuena! · Has encontrado las {n} parejas. · Repasa las palabras · Jugar otra vez · Cambiar de tema |
 | Formulaire | Crear un tema · Modificar el tema · Nombre del tema · Ej.: La ropa · Clase · Palabras e imágenes · {k} listas · mínimo 2 · Añadir foto · Palabra {i} · el perro · Añadir una palabra · Cancelar · Guardar el tema · Guardando… |
-| Statut | Tema «{nombre}» guardado en {clase}. · Modo profesora activado: puedes crear, modificar y eliminar temas. · Has salido del modo profesora. |
+| Statut | Tema «{nombre}» guardado en {clase}. · Tema «{nombre}» oculto para los alumnos. · Tema «{nombre}» visible para los alumnos. · Modo profesora activado: puedes crear, modificar, ocultar y eliminar temas. · Has salido del modo profesora. |
 
 ## 8. Thèmes intégrés (5e)
 

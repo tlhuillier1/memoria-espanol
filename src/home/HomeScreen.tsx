@@ -8,12 +8,15 @@ import type { Grade, Theme } from '../types'
 import { LoginDialog } from './LoginDialog'
 import { themeCountLabel } from './texts'
 import { ThemeCard } from './ThemeCard'
+import { visibleThemes } from './visibility'
 import { WordCountDialog } from './WordCountDialog'
 import './home.css'
 
 interface HomeScreenProps {
   grade: Grade
   themes: Theme[]
+  /** Ids of the themes hidden from the students (built-in or created). */
+  hidden: ReadonlySet<string>
   /** Loading of the teacher's themes (the built-in ones are always there). */
   loadStatus: LoadStatus
   /** Teacher mode: creating, modifying and deleting themes. */
@@ -26,16 +29,20 @@ interface HomeScreenProps {
   onEdit: (theme: Theme) => void
   /** Resolves false when the theme could not be deleted. */
   onDelete: (theme: Theme) => Promise<boolean>
+  /** Hides or shows a theme for the students; resolves false when that failed. */
+  onSetHidden: (theme: Theme, hidden: boolean) => Promise<boolean>
   onLogin: (password: string) => Promise<LoginResult>
   onLogout: () => void
   onDismissNotice: () => void
 }
 
 export function HomeScreen(props: HomeScreenProps) {
-  const { grade, themes, loadStatus, teacher, notice, onDismissNotice } = props
+  const { grade, hidden, loadStatus, teacher, notice, onDismissNotice } = props
   const [picking, setPicking] = useState<Theme | null>(null)
   const [loggingIn, setLoggingIn] = useState(false)
   const sectionTitleRef = useRef<HTMLHeadingElement>(null)
+  // Students never see the hidden themes, not even in the counts of the grade picker.
+  const themes = visibleThemes(props.themes, hidden, teacher)
   const gradeThemes = themes.filter((t) => t.grade === grade)
 
   const handleDelete = async (theme: Theme) => {
@@ -98,9 +105,11 @@ export function HomeScreen(props: HomeScreenProps) {
               key={theme.id}
               theme={theme}
               editable={teacher}
+              hidden={hidden.has(theme.id)}
               onPlay={() => setPicking(theme)}
               onEdit={() => props.onEdit(theme)}
               onDelete={() => handleDelete(theme)}
+              onSetHidden={(hide) => props.onSetHidden(theme, hide)}
             />
           ))}
           {teacher && (

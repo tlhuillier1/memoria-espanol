@@ -33,8 +33,23 @@ export interface ApiTheme {
   words: { word: string; image: string }[]
 }
 
+/** Id of a built-in theme (design/data/themes.json): lowercase words joined by dashes. */
+const BUILT_IN_ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
+const MAX_THEME_ID_LENGTH = 40
+
 export const isThemeId = (id: string) => UUID.test(id)
 export const isImageId = (id: string) => IMAGE_ID.test(id)
+
+/**
+ * Theme ids the teacher may hide (db/schema.sql hidden_themes): a created theme, as the
+ * database returns it (lowercase UUID), or a built-in one. The server does not know the
+ * built-in ids, so it only checks their shape.
+ */
+export function hideableThemeKind(id: string): 'created' | 'builtIn' | null {
+  if (id.length > MAX_THEME_ID_LENGTH || id !== id.toLowerCase()) return null
+  if (isThemeId(id)) return 'created'
+  return BUILT_IN_ID.test(id) ? 'builtIn' : null
+}
 
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null
 

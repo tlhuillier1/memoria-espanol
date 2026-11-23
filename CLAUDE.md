@@ -26,7 +26,8 @@ En cas de doute, la spécification et le design system font foi ; le prototype s
 - Thèmes créés dans **Neon Postgres (plan gratuit)**, projet `memoria-espanol` (`noisy-poetry-04655432`, Francfort), driver HTTP `@neondatabase/serverless`. Photos dans la base (`bytea`, adressées par SHA-256, en cache un an). Branche Neon `main` = production, branche `dev` = local + aperçus Vercel. Schéma : `db/schema.sql` (idempotent, à appliquer sur chaque branche).
 - Fonctions Vercel en région `fra1` (`vercel.json`), à côté de la base.
 - **Mode professeure** : un mot de passe unique (`TEACHER_PASSWORD`), puis cookie HttpOnly signé (`SESSION_SECRET`, 30 jours glissants). Toute écriture est vérifiée côté serveur ; 10 échecs / 15 min / IP ⇒ 429.
-- Accès aux thèmes derrière une interface unique (`ThemeStore` : `list`, `get`, `save`, `remove`) ; implémentation `apiThemeStore.ts`.
+- Accès aux thèmes derrière une interface unique (`ThemeStore` : `list` → `{ themes, hidden }`, `get`, `save`, `remove`, `setHidden`) ; implémentation `apiThemeStore.ts`.
+- **Thèmes cachés** : la professeure cache n'importe quel thème (intégré ou créé) aux élèves ; table `hidden_themes` (id texte, pas de clé étrangère), routes `PUT` / `DELETE api/hidden/<id>`, liste publique renvoyée par `GET api/themes`, filtrage côté écran élève (`src/home/visibility.ts`).
 - Tests : Vitest pour la logique de jeu (tirage, paires, fin de partie) et la validation du formulaire.
 
 ## Règles de travail
@@ -69,7 +70,7 @@ Déploiement : projet Vercel `memoria-espanol` (compte `tlhuillier1`), relié au
 - `api/` — fonctions Vercel (une route par fichier, `[id].ts` pour `/<id>`) ; `server/` — code partagé côté serveur (session, validation, accès Neon), imports relatifs **avec `.js`** (ESM Node), vérifié par `tsconfig.api.json`, testé par Vitest (`server/**/*.test.ts`).
 - `src/store/` — interface `ThemeStore` + thèmes intégrés ; `apiThemeStore.ts` (envoie d'abord les nouvelles photos à `api/images`, puis le thème) ; `api.ts` (`apiFetch`, `ApiError` avec le statut HTTP) ; `teacherSession.ts` (connexion) ; `useCustomThemes` (écriture serveur d'abord, puis état React) ; classe mémorisée en localStorage (`gradePreference.ts`).
 - `src/game/` — moteur pur (`engine.ts`), choix des mots de la pop-up → paquet de la partie (`selection.ts` : `WordChoice` → `GameDeck` = mots + nombre à tirer ; avec des mots cochés, nombre = tous, donc « rejouer » garde les mêmes), hook des minuteries (`useMemoryGame.ts`), écrans de partie et de fin.
-- `src/home/` — accueil, cartes de thème (suppression confirmée en ligne), pop-ups du choix des mots (`WordCountDialog`, deux modes) et de connexion professeure (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur ; classes CSS communes `.dialog*`).
+- `src/home/` — accueil, cartes de thème (suppression confirmée en ligne, « Ocultar / Mostrar »), filtre des thèmes cachés pour les élèves (`visibility.ts`), pop-ups du choix des mots (`WordCountDialog`, deux modes) et de connexion professeure (`<dialog>` natif en `showModal()` : piège de focus et Échap fournis par le navigateur ; classes CSS communes `.dialog*`).
 - `src/editor/` — formulaire de création / modification : brouillon et validation purs (`draft.ts`), import des photos (`readImage.ts`, 360 px max, JPEG 0,82 sur fond blanc), écran `EditorScreen.tsx`.
 
 ## Pièges rencontrés

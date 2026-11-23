@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { Theme } from '../types'
-import { choiceSummary, pickerSummary, selectedCountLabel, themeCountLabel, themeSubtitle } from './texts'
+import {
+  choiceSummary,
+  pickerSummary,
+  selectedCountLabel,
+  themeCountLabel,
+  themeSubtitle,
+  visibilityError,
+  visibilityNotice,
+} from './texts'
 
 describe('home texts', () => {
   it('pluralizes the theme count', () => {
@@ -32,5 +40,16 @@ describe('home texts', () => {
     expect(choiceSummary(1, 18)).toBe('Elige al menos 2 palabras.')
     expect(choiceSummary(5, 18)).toBe('10 cartas · 5 palabras elegidas')
     expect(choiceSummary(18, 18)).toBe('36 cartas · todas las palabras del tema')
+  })
+
+  it('announces a hidden or shown theme', () => {
+    const theme: Theme = { id: 'frutas', grade: '5e', name: 'Las frutas', builtIn: true, words: [] }
+    expect(visibilityNotice(theme, true)).toBe('Tema «Las frutas» oculto para los alumnos.')
+    expect(visibilityNotice(theme, false)).toBe('Tema «Las frutas» visible para los alumnos.')
+  })
+
+  it('explains a failed hide or show', () => {
+    expect(visibilityError(true)).toBe('No se ha podido ocultar el tema. Inténtalo de nuevo.')
+    expect(visibilityError(false)).toBe('No se ha podido mostrar el tema. Inténtalo de nuevo.')
   })
 })

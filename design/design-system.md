@@ -66,7 +66,7 @@ Repli : `'Trebuchet MS', sans-serif` pour Baloo 2 ; `'Segoe UI', system-ui, sans
 **Lien d'action** — texte souligné 800, bleu (Modificar) ou rouge (Eliminar), hauteur ≥ 44.
 **Sélecteur de classe** — boutons ≥ 108×66, libellé Baloo 32 px + compteur 13 px ; actif = fond `--primary` texte blanc, inactif = fond blanc ; `aria-pressed`.
 **Pastille de statistique** — fond blanc (partie) ou crème (fin), contour encre, rayon 14, libellé MAJUSCULE 12 px `--muted` au-dessus, valeur Baloo dessous, largeur ≥ 88.
-**Carte de thème** — fond blanc, contour, rayon 20, ombre 0 6px 0, padding 16, gap 14 : aperçu (3 vignettes carrées blanches sur fond teinté, rayon 14, padding 12) → nom + sous-ligne (+ badge) → bouton Jugar → actions.
+**Carte de thème** — fond blanc, contour, rayon 20, ombre 0 6px 0, padding 16, gap 14 : aperçu (3 vignettes carrées blanches sur fond teinté, rayon 14, padding 12) → nom + sous-ligne (+ badges « Oculto » / « De la profe », empilés à droite) → bouton Jugar → actions (mode professeure : « Modificar · Eliminar » pour les thèmes créés, puis « Ocultar » / « Mostrar » seul sur sa ligne, pour tous). **Thème caché** (vu par la professeure seulement) : sans ombre, aperçu en niveaux de gris à 50 % d'opacité ; le nom et les textes gardent leur contraste. Badge « Oculto » : fond `--ink`, texte blanc, icône `eye-off` 14 px.
 **Carte « Crear un tema »** — contour 2,5 px pointillé, fond `--surface-warm`, hauteur ≥ 280, pastille ronde 60 px bleue avec `plus` blanc.
 **Carte de jeu** — `<button>` au ratio 4:3, deux faces superposées (voir Animations). Contour encre 2 px, rayon 16. Dos : `--card-back` + `card-back.svg` (56 % × 70 %) + filet intérieur `inset 0 0 0 7px rgba(255,255,255,.14)`. Paire trouvée : `outline: 4px solid var(--success); outline-offset: -3px` + pastille ronde 28 px verte avec coche en haut à droite. Erreur : même outline en `--accent-red`.
 **Champ texte** — hauteur 48–52, contour encre, rayon 12, texte 18–20 px 700.
@@ -76,7 +76,7 @@ Repli : `'Trebuchet MS', sans-serif` pour Baloo 2 ; `'Segoe UI', system-ui, sans
 
 ## Icônes
 
-`assets/icons/*.svg` : viewBox 24, trait `currentColor` 2,2, extrémités arrondies — `arrow-left`, `plus`, `minus`, `trash`, `refresh`, `image`, `check`. Toujours `aria-hidden="true"` ; le libellé est sur le bouton.
+`assets/icons/*.svg` : viewBox 24, trait `currentColor` 2,2, extrémités arrondies — `arrow-left`, `plus`, `minus`, `trash`, `refresh`, `image`, `check`, `eye-off`. Toujours `aria-hidden="true"` ; le libellé est sur le bouton.
 
 ## Illustrations des thèmes
 
